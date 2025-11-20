@@ -481,7 +481,7 @@
                     </div>
                     <div class="input-group">
                         <label for="simple-holes">Number of Holes:</label>
-                        <select id="simple-holes" onchange="updateSimpleInputs()">
+                        <select id="simple-holes" onchange="onHoleNumberChange()">
                             <option value="5">5 holes</option>
                             <option value="6" selected>6 holes</option>
                             <option value="7">7 holes</option>
@@ -489,7 +489,23 @@
                         </select>
                     </div>
                 </div>
-                <button class="calculate-button" onclick="calculateSimple()">Calculate Positions</button>
+                <button id="simple-calculate-button" class="calculate-button" onclick="calculateSimple()">Calculate Positions</button>
+            </div>
+
+            <div id="simple-model-selection" class="input-section" style="display: none;">
+                <h3>Select Xiao Model (8 holes)</h3>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: #5d4a37; font-weight: bold;">Choose a model:</label>
+                    <select id="simple-model" onchange="onModelChange()" style="width: 100%; padding: 12px; border: 2px solid #d4b896; border-radius: 8px; font-size: 1em; background: #fffcf7; font-family: 'Georgia', 'Palatino', serif;">
+                        <option value="">-- Select a model --</option>
+                        <option value="pentatonic">Pentatonic Majeure Traditionnelle (la plus courante)</option>
+                        <option value="heptatonic">Heptatonique Traditionnelle (moins courante)</option>
+                        <option value="diatonic">Diatonique Moderne (occidentalisée)</option>
+                    </select>
+                </div>
+                <div id="model-description" style="background: #fff8f0; padding: 20px; border-radius: 8px; border-left: 4px solid #8b6f47; display: none;">
+                    <!-- Model description will be inserted here -->
+                </div>
             </div>
 
             <div id="simple-interactive" class="input-section" style="display: none;">
@@ -715,6 +731,197 @@
             document.getElementById('simple-input-holes').textContent = document.getElementById('simple-holes').value;
         }
 
+        // Handle hole number change
+        function onHoleNumberChange() {
+            updateSimpleInputs();
+            const numHoles = parseInt(document.getElementById('simple-holes').value);
+            const calcButton = document.getElementById('simple-calculate-button');
+            
+            if (numHoles === 8) {
+                // Show model selection for 8 holes
+                document.getElementById('simple-model-selection').style.display = 'block';
+                calcButton.style.display = 'none';
+                document.getElementById('simple-interactive').style.display = 'none';
+                document.getElementById('simple-results').classList.add('hidden');
+            } else {
+                // Hide model selection and show calculate button for other numbers
+                document.getElementById('simple-model-selection').style.display = 'none';
+                calcButton.style.display = 'block';
+                document.getElementById('simple-interactive').style.display = 'none';
+                document.getElementById('simple-results').classList.add('hidden');
+            }
+        }
+
+        // Model definitions for 8 holes
+        const xiaoModels = {
+            pentatonic: {
+                name: "Xiao Pentatonique Majeure Traditionnelle",
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 1 — La xiao pentatonique majeure traditionnelle (la plus courante)</h3>
+                    <p><strong>Gamme :</strong> Gong – Shang – Jue – Zhi – Yu</p>
+                    <p>Pentatonique majeure chinoise → équivalent de la pentatonique majeure occidentale.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Les 8 notes (avec intervalles) :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m3 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>m3 (12)</li>
+                        <li>M2 (14) ← facultatif selon les modèles</li>
+                        <li>M2 (16)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +3 – +2 – +3 – +2 – +2</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">C'est la structure 90% des xiao du commerce. Elle donne une mélodie "flottante", typique de la musique chinoise.</p>
+                `,
+                intervals: [0, 2, 4, 7, 9, 12, 14, 16] // semitones from base
+            },
+            heptatonic: {
+                name: "Xiao Heptatonique Traditionnelle",
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 2 — Xiao heptatonique traditionnelle (moins courante)</h3>
+                    <p>Dans certaines musiques rituelles ou locales, la xiao est accordée avec une gamme heptatonique ancienne, proche du mode mixolydien ou dorien selon la région.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Les 8 notes (avec intervalles) :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m2 (5)</li>
+                        <li>M2 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>m2 (10)</li>
+                        <li>M2 (12)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +1 – +2 – +2 – +1 – +2</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">On est proche d'une gamme majeure mais avec une 4e augmentée et une 7e mineure. C'est rare mais historiquement authentique.</p>
+                `,
+                intervals: [0, 2, 4, 5, 7, 9, 10, 12]
+            },
+            diatonic: {
+                name: "Xiao Diatonique Moderne",
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 3 — Xiao diatonique moderne (occidentalisée)</h3>
+                    <p>Utilisée par certains musiciens contemporains pour jouer des mélodies occidentales. Ici on force une gamme majeure complète.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Les 8 notes (avec intervalles) :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m2 (5)</li>
+                        <li>M2 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>M2 (11)</li>
+                        <li>m2 (12)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +1 – +2 – +2 – +2 – +1</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">C'est jouable, mais ergonomiquement difficile. Les trous se superposent souvent.</p>
+                `,
+                intervals: [0, 2, 4, 5, 7, 9, 11, 12]
+            }
+        };
+
+        // Handle model change
+        function onModelChange() {
+            const modelKey = document.getElementById('simple-model').value;
+            const descDiv = document.getElementById('model-description');
+            
+            if (modelKey === '') {
+                descDiv.style.display = 'none';
+                document.getElementById('simple-results').classList.add('hidden');
+                return;
+            }
+            
+            const model = xiaoModels[modelKey];
+            descDiv.innerHTML = model.description;
+            descDiv.style.display = 'block';
+            
+            // Automatically calculate when model is selected
+            calculateWithModel(model);
+        }
+
+        // Calculate positions based on selected model
+        function calculateWithModel(model) {
+            const baseFreq = parseFloat(document.getElementById('simple-base-frequency').value);
+            const diameter = parseFloat(document.getElementById('simple-diameter').value);
+            const temp = parseFloat(document.getElementById('simple-temp').value);
+            
+            // Speed of sound in air (temperature dependent)
+            const speedOfSound = (331.3 + 0.606 * temp) * 1000; // mm/s
+            const endCorrection = 0.6 * diameter;
+            
+            const tbody = document.getElementById('simple-tbody');
+            tbody.innerHTML = '';
+            
+            // Calculate positions for each hole
+            const positions = [];
+            const frequencies = [];
+            
+            for (let i = 0; i < model.intervals.length; i++) {
+                const semitone = model.intervals[i];
+                const frequency = baseFreq * Math.pow(2, semitone / 12);
+                frequencies.push(frequency);
+                
+                const effectiveLength = (speedOfSound / (2 * frequency)) - endCorrection;
+                positions.push(effectiveLength);
+            }
+            
+            // Build table rows with warnings about hole overlap
+            let hasOverlapWarning = false;
+            for (let i = 0; i < model.intervals.length; i++) {
+                const frequency = frequencies[i];
+                const position = positions[i];
+                const note = getNoteName(frequency);
+                const semitone = model.intervals[i];
+                
+                // Calculate distance to next hole
+                let distanceCell = '';
+                let warningCell = '';
+                if (i < model.intervals.length - 1) {
+                    const distance = Math.abs(positions[i] - positions[i + 1]);
+                    distanceCell = distance.toFixed(2);
+                    
+                    // Check for overlap risk (holes too close, less than 10mm)
+                    if (distance < 10) {
+                        warningCell = '<span class="warning-indicator warning-limit">⚠ Risque de superposition</span>';
+                        hasOverlapWarning = true;
+                    } else if (distance < 15) {
+                        warningCell = '<span class="warning-indicator warning-difficult">⚠ Trous rapprochés</span>';
+                    } else {
+                        warningCell = '<span class="warning-indicator warning-comfortable">✓ OK</span>';
+                    }
+                } else {
+                    distanceCell = '—';
+                    warningCell = '';
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>Trou ${i + 1}</td>
+                    <td>${frequency.toFixed(2)}</td>
+                    <td>${position.toFixed(2)}</td>
+                    <td>${distanceCell}</td>
+                    <td>+${semitone} demi-tons</td>
+                    <td>${note} ${warningCell}</td>
+                `;
+                tbody.appendChild(row);
+            }
+            
+            // Add empirical warning if there's overlap
+            if (hasOverlapWarning) {
+                const warningRow = document.createElement('tr');
+                warningRow.innerHTML = `
+                    <td colspan="6" style="background: #fff3cd; color: #856404; font-weight: bold; padding: 15px;">
+                        ⚠️ <strong>Méthode empirique recommandée :</strong> En cas de risque de superposition des trous, 
+                        il faut remonter le prochain trou et l'élargir. Cette approche empirique permet d'ajuster 
+                        la position et le diamètre des trous pour éviter les chevauchements tout en maintenant l'accord souhaité.
+                    </td>
+                `;
+                tbody.appendChild(warningRow);
+            }
+            
+            document.getElementById('simple-results').classList.remove('hidden');
+        }
+
         // Update Acoustical inputs in real-time
         function updateAcousticalInputs() {
             document.getElementById('acoustical-input-frequency').textContent = document.getElementById('acoustical-frequency').value;
@@ -812,6 +1019,12 @@
             const diameter = parseFloat(document.getElementById('simple-diameter').value);
             const temp = parseFloat(document.getElementById('simple-temp').value);
             const numHoles = parseInt(document.getElementById('simple-holes').value);
+            
+            // For 8 holes, use model selection instead
+            if (numHoles === 8) {
+                alert('Pour 8 trous, veuillez sélectionner un modèle ci-dessus.');
+                return;
+            }
             
             // Initialize with base frequency
             holeFrequencies = [baseFreq];
