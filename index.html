@@ -215,6 +215,27 @@
             margin-bottom: 20px;
         }
 
+        /* Responsive grid for input fields on larger screens */
+        @media (min-width: 768px) {
+            .input-section {
+                max-width: 800px;
+            }
+            
+            .input-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            
+            .input-grid .input-group {
+                margin-bottom: 0;
+            }
+            
+            .input-grid.full-width {
+                grid-template-columns: 1fr;
+            }
+        }
+
         label {
             display: block;
             margin-bottom: 8px;
@@ -442,29 +463,31 @@
 
             <div class="input-section">
                 <h3>Input Parameters</h3>
-                <div class="input-group">
-                    <label for="simple-base-frequency">Base Frequency (Hz):</label>
-                    <input type="number" id="simple-base-frequency" value="440" min="100" max="1000" step="0.01" oninput="updateSimpleInputs()">
-                    <div class="input-hint">Fundamental frequency of your bamboo (A4 = 440 Hz, D4 = 293.66 Hz, G4 = 392 Hz)</div>
-                </div>
-                <div class="input-group">
-                    <label for="simple-diameter">Inner Diameter (mm):</label>
-                    <input type="number" id="simple-diameter" value="19" min="10" max="50" step="0.5" oninput="updateSimpleInputs()">
-                    <div class="input-hint">Internal bore diameter of the flute</div>
-                </div>
-                <div class="input-group">
-                    <label for="simple-temp">Temperature (°C):</label>
-                    <input type="number" id="simple-temp" value="20" min="-10" max="40" step="1" oninput="updateSimpleInputs()">
-                    <div class="input-hint">Ambient temperature (affects speed of sound)</div>
-                </div>
-                <div class="input-group">
-                    <label for="simple-holes">Number of Holes:</label>
-                    <select id="simple-holes" onchange="updateSimpleInputs()">
-                        <option value="5">5 holes</option>
-                        <option value="6" selected>6 holes</option>
-                        <option value="7">7 holes</option>
-                        <option value="8">8 holes</option>
-                    </select>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="simple-base-frequency">Base Frequency (Hz):</label>
+                        <input type="number" id="simple-base-frequency" value="440" min="100" max="1000" step="0.01" oninput="updateSimpleInputs()">
+                        <div class="input-hint">Fundamental frequency of your bamboo (A4 = 440 Hz, D4 = 293.66 Hz, G4 = 392 Hz)</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="simple-diameter">Inner Diameter (mm):</label>
+                        <input type="number" id="simple-diameter" value="19" min="10" max="50" step="0.5" oninput="updateSimpleInputs()">
+                        <div class="input-hint">Internal bore diameter of the flute</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="simple-temp">Temperature (°C):</label>
+                        <input type="number" id="simple-temp" value="20" min="-10" max="40" step="1" oninput="updateSimpleInputs()">
+                        <div class="input-hint">Ambient temperature (affects speed of sound)</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="simple-holes">Number of Holes:</label>
+                        <select id="simple-holes" onchange="updateSimpleInputs()">
+                            <option value="5">5 holes</option>
+                            <option value="6" selected>6 holes</option>
+                            <option value="7">7 holes</option>
+                            <option value="8">8 holes</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="calculate-button" onclick="calculateSimple()">Calculate Positions</button>
             </div>
@@ -533,29 +556,31 @@
 
             <div class="input-section">
                 <h3>Input Parameters</h3>
-                <div class="input-group">
-                    <label for="acoustical-frequency">Base Frequency (Hz):</label>
-                    <input type="number" id="acoustical-frequency" value="293.66" min="100" max="1000" step="0.01" oninput="updateAcousticalInputs()">
-                    <div class="input-hint">Fundamental frequency (D4 = 293.66 Hz)</div>
-                </div>
-                <div class="input-group">
-                    <label for="acoustical-diameter">Inner Diameter (mm):</label>
-                    <input type="number" id="acoustical-diameter" value="19" min="10" max="50" step="0.5" oninput="updateAcousticalInputs()">
-                    <div class="input-hint">Internal bore diameter</div>
-                </div>
-                <div class="input-group">
-                    <label for="acoustical-temp">Temperature (°C):</label>
-                    <input type="number" id="acoustical-temp" value="20" min="-10" max="40" step="1" oninput="updateAcousticalInputs()">
-                    <div class="input-hint">Ambient temperature affects sound velocity</div>
-                </div>
-                <div class="input-group">
-                    <label for="acoustical-holes">Number of Holes:</label>
-                    <select id="acoustical-holes" onchange="updateAcousticalInputs()">
-                        <option value="5">5 holes</option>
-                        <option value="6" selected>6 holes</option>
-                        <option value="7">7 holes</option>
-                        <option value="8">8 holes</option>
-                    </select>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="acoustical-frequency">Base Frequency (Hz):</label>
+                        <input type="number" id="acoustical-frequency" value="293.66" min="100" max="1000" step="0.01" oninput="updateAcousticalInputs()">
+                        <div class="input-hint">Fundamental frequency (D4 = 293.66 Hz)</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="acoustical-diameter">Inner Diameter (mm):</label>
+                        <input type="number" id="acoustical-diameter" value="19" min="10" max="50" step="0.5" oninput="updateAcousticalInputs()">
+                        <div class="input-hint">Internal bore diameter</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="acoustical-temp">Temperature (°C):</label>
+                        <input type="number" id="acoustical-temp" value="20" min="-10" max="40" step="1" oninput="updateAcousticalInputs()">
+                        <div class="input-hint">Ambient temperature affects sound velocity</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="acoustical-holes">Number of Holes:</label>
+                        <select id="acoustical-holes" onchange="updateAcousticalInputs()">
+                            <option value="5">5 holes</option>
+                            <option value="6" selected>6 holes</option>
+                            <option value="7">7 holes</option>
+                            <option value="8">8 holes</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="calculate-button" onclick="calculateAcoustical()">Calculate Positions</button>
             </div>
@@ -616,34 +641,36 @@
 
             <div class="input-section">
                 <h3>Input Parameters</h3>
-                <div class="input-group">
-                    <label for="benade-length">Fundamental Length (mm):</label>
-                    <input type="number" id="benade-length" value="400" min="100" max="1000" step="1" oninput="updateBenadeInputs()">
-                    <div class="input-hint">Distance from blowing edge to the end</div>
-                </div>
-                <div class="input-group">
-                    <label for="benade-bore">Bore Diameter (mm):</label>
-                    <input type="number" id="benade-bore" value="19" min="10" max="50" step="0.5" oninput="updateBenadeInputs()">
-                    <div class="input-hint">Internal diameter of the tube</div>
-                </div>
-                <div class="input-group">
-                    <label for="benade-hole-dia">Hole Diameter (mm):</label>
-                    <input type="number" id="benade-hole-dia" value="8" min="3" max="20" step="0.5" oninput="updateBenadeInputs()">
-                    <div class="input-hint">Diameter of the finger holes</div>
-                </div>
-                <div class="input-group">
-                    <label for="benade-wall">Wall Thickness (mm):</label>
-                    <input type="number" id="benade-wall" value="3" min="1" max="10" step="0.5" oninput="updateBenadeInputs()">
-                    <div class="input-hint">Thickness of the flute wall</div>
-                </div>
-                <div class="input-group">
-                    <label for="benade-holes">Number of Holes:</label>
-                    <select id="benade-holes" onchange="updateBenadeInputs()">
-                        <option value="5">5 holes</option>
-                        <option value="6" selected>6 holes</option>
-                        <option value="7">7 holes</option>
-                        <option value="8">8 holes</option>
-                    </select>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="benade-length">Fundamental Length (mm):</label>
+                        <input type="number" id="benade-length" value="400" min="100" max="1000" step="1" oninput="updateBenadeInputs()">
+                        <div class="input-hint">Distance from blowing edge to the end</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="benade-bore">Bore Diameter (mm):</label>
+                        <input type="number" id="benade-bore" value="19" min="10" max="50" step="0.5" oninput="updateBenadeInputs()">
+                        <div class="input-hint">Internal diameter of the tube</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="benade-hole-dia">Hole Diameter (mm):</label>
+                        <input type="number" id="benade-hole-dia" value="8" min="3" max="20" step="0.5" oninput="updateBenadeInputs()">
+                        <div class="input-hint">Diameter of the finger holes</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="benade-wall">Wall Thickness (mm):</label>
+                        <input type="number" id="benade-wall" value="3" min="1" max="10" step="0.5" oninput="updateBenadeInputs()">
+                        <div class="input-hint">Thickness of the flute wall</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="benade-holes">Number of Holes:</label>
+                        <select id="benade-holes" onchange="updateBenadeInputs()">
+                            <option value="5">5 holes</option>
+                            <option value="6" selected>6 holes</option>
+                            <option value="7">7 holes</option>
+                            <option value="8">8 holes</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="calculate-button" onclick="calculateBenade()">Calculate Positions</button>
             </div>
@@ -777,6 +804,7 @@
         // State for interactive hole building
         let holeFrequencies = [];
         let selectedIntervals = [];
+        let preCalculatedPositions = []; // Store pre-calculated positions for all intervals
 
         // Simple Ratio Method (Xiao Flute - Sanfen Sunyi)
         function calculateSimple() {
@@ -788,6 +816,9 @@
             // Initialize with base frequency
             holeFrequencies = [baseFreq];
             selectedIntervals = [];
+            
+            // Pre-calculate all possible positions for each interval
+            preCalculatedPositions = calculateAllPossiblePositions(baseFreq, diameter, temp);
             
             // Clear results table
             const tbody = document.getElementById('simple-tbody');
@@ -801,6 +832,28 @@
             
             // Build the interactive interface starting from hole 1
             buildHoleSelector(0, numHoles);
+        }
+
+        // Pre-calculate positions for all possible interval choices
+        function calculateAllPossiblePositions(baseFreq, diameter, temp) {
+            const speedOfSound = (331.3 + 0.606 * temp) * 1000; // mm/s
+            const endCorrection = 0.6 * diameter;
+            
+            let positions = [];
+            
+            // For each hole level, calculate positions for all interval choices
+            for (let holeLevel = 0; holeLevel < 8; holeLevel++) {
+                positions[holeLevel] = [];
+                
+                for (let intervalIdx = 0; intervalIdx < intervalRatios.length; intervalIdx++) {
+                    const interval = intervalRatios[intervalIdx];
+                    const frequency = baseFreq * interval.ratio;
+                    const effectiveLength = (speedOfSound / (2 * frequency)) - endCorrection;
+                    positions[holeLevel][intervalIdx] = effectiveLength;
+                }
+            }
+            
+            return positions;
         }
 
         function buildHoleSelector(holeIndex, totalHoles) {
@@ -824,7 +877,8 @@
                     <select id="interval-select-${holeIndex}" style="width: 100%; padding: 12px; border: 2px solid #d4b896; border-radius: 8px; font-size: 1em; background: #fffcf7; font-family: 'Georgia', 'Palatino', serif; margin-bottom: 15px;">
                         ${intervalRatios.map((interval, idx) => {
                             const nextFreq = currentFreq * interval.ratio;
-                            return `<option value="${idx}">${interval.name} → ${nextFreq.toFixed(2)} Hz (${getNoteName(nextFreq)})</option>`;
+                            const warning = getWarningForInterval(holeIndex, idx);
+                            return `<option value="${idx}">${interval.name} → ${nextFreq.toFixed(2)} Hz (${getNoteName(nextFreq)}) ${warning}</option>`;
                         }).join('')}
                     </select>
                     <button onclick="selectInterval(${holeIndex}, ${totalHoles})" style="background: linear-gradient(135deg, #8b6f47 0%, #6d5738 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; font-family: 'Georgia', 'Palatino', serif;">
@@ -833,6 +887,52 @@
                 </div>
             `;
             builder.appendChild(div);
+        }
+
+        // Get warning text for an interval choice at a specific hole index
+        function getWarningForInterval(holeIndex, intervalIdx) {
+            if (holeIndex === 0) {
+                return ''; // No warning for first hole
+            }
+            
+            // Get the position of the previous hole
+            const diameter = parseFloat(document.getElementById('simple-diameter').value);
+            const temp = parseFloat(document.getElementById('simple-temp').value);
+            const speedOfSound = (331.3 + 0.606 * temp) * 1000;
+            const endCorrection = 0.6 * diameter;
+            
+            const prevFreq = holeFrequencies[holeIndex];
+            const prevPosition = (speedOfSound / (2 * prevFreq)) - endCorrection;
+            
+            // Get the position of current interval choice
+            const interval = intervalRatios[intervalIdx];
+            const nextFreq = prevFreq * interval.ratio;
+            const nextPosition = (speedOfSound / (2 * nextFreq)) - endCorrection;
+            
+            const distance = Math.abs(prevPosition - nextPosition);
+            
+            // Use holeIndex - 1 because we're calculating distance from previous hole
+            return getWarningText(holeIndex - 1, distance);
+        }
+
+        // Get warning text based on distance
+        function getWarningText(holeIndex, distance) {
+            if (holeIndex >= holeDistanceConstraints.length) {
+                return '';
+            }
+            
+            const constraint = holeDistanceConstraints[holeIndex];
+            const dist = Math.abs(distance);
+            
+            if (dist >= constraint.comfortable.min && dist <= constraint.comfortable.max) {
+                return '✓';
+            } else if (dist >= constraint.difficult.min && dist <= constraint.difficult.max) {
+                return '⚠ Difficult';
+            } else if (dist > constraint.limit) {
+                return `⚠ Exceeds ${constraint.limit}mm`;
+            } else {
+                return '⚠ Too close';
+            }
         }
 
         function selectInterval(holeIndex, totalHoles) {
@@ -885,8 +985,7 @@
                 let distanceCell = '';
                 if (i < selectedIntervals.length - 1) {
                     const distance = Math.abs(positions[i] - positions[i + 1]);
-                    const warningIndicator = evaluateHoleDistance(i, distance);
-                    distanceCell = `${distance.toFixed(2)} ${warningIndicator}`;
+                    distanceCell = distance.toFixed(2);
                 } else {
                     distanceCell = '—';
                 }
