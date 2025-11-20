@@ -317,6 +317,30 @@
             display: none;
         }
 
+        .warning-indicator {
+            display: inline-block;
+            margin-left: 5px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .warning-comfortable {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .warning-difficult {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .warning-limit {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -396,6 +420,15 @@
                         <li><strong>Hole position:</strong> Position = L_eff - δ (from blowing edge)</li>
                     </ul>
 
+                    <h3>Empirical Approach for Flute Crafters:</h3>
+                    <p>This calculator provides theoretical positions, but flute making requires an empirical approach:</p>
+                    <ul>
+                        <li><strong>Start small:</strong> Begin by drilling holes smaller than calculated</li>
+                        <li><strong>Test and adjust:</strong> Gradually enlarge each hole while testing the pitch</li>
+                        <li><strong>Work systematically:</strong> Start from the lowest pitch (furthest hole) and move toward the highest (closest to blowing edge)</li>
+                        <li><strong>Fine-tune:</strong> Small adjustments in hole size significantly affect pitch</li>
+                    </ul>
+
                     <h3>Traditional Intervals:</h3>
                     <ul>
                         <li><strong>Perfect Fifth (3/2):</strong> Up 7 semitones, ratio 1.5</li>
@@ -451,6 +484,7 @@
                             <th>Hole Number</th>
                             <th>Frequency (Hz)</th>
                             <th>Distance from Blowing Edge (mm)</th>
+                            <th>Distance to Next Hole (mm)</th>
                             <th>Interval</th>
                             <th>Note</th>
                         </tr>
@@ -691,9 +725,41 @@
         // Note names for reference
         const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         
+        // Hole distance constraints (center to center) in mm
+        // Index 0 = hole 1→2, Index 1 = hole 2→3, etc.
+        const holeDistanceConstraints = [
+            { comfortable: { min: 18, max: 22 }, difficult: { min: 23, max: 26 }, limit: 28 }, // Hole 1→2
+            { comfortable: { min: 20, max: 25 }, difficult: { min: 26, max: 30 }, limit: 32 }, // Hole 2→3
+            { comfortable: { min: 22, max: 28 }, difficult: { min: 29, max: 33 }, limit: 35 }, // Hole 3→4
+            { comfortable: { min: 20, max: 25 }, difficult: { min: 26, max: 30 }, limit: 32 }, // Hole 4→5
+            { comfortable: { min: 18, max: 23 }, difficult: { min: 24, max: 28 }, limit: 30 }, // Hole 5→6
+            { comfortable: { min: 16, max: 20 }, difficult: { min: 21, max: 24 }, limit: 26 }, // Hole 6→7
+            { comfortable: { min: 14, max: 18 }, difficult: { min: 19, max: 22 }, limit: 24 }  // Hole 7→8
+        ];
+        
         function getNoteFromSemitones(baseSemitones, offset) {
             const totalSemitones = (baseSemitones + offset) % 12;
             return noteNames[totalSemitones];
+        }
+
+        // Function to evaluate hole distance and return warning indicator
+        function evaluateHoleDistance(holeIndex, distance) {
+            if (holeIndex >= holeDistanceConstraints.length) {
+                return ''; // No constraint for this hole pair
+            }
+            
+            const constraint = holeDistanceConstraints[holeIndex];
+            const dist = Math.abs(distance);
+            
+            if (dist >= constraint.comfortable.min && dist <= constraint.comfortable.max) {
+                return `<span class="warning-indicator warning-comfortable">✓ Comfortable</span>`;
+            } else if (dist >= constraint.difficult.min && dist <= constraint.difficult.max) {
+                return `<span class="warning-indicator warning-difficult">⚠ Difficult</span>`;
+            } else if (dist > constraint.limit) {
+                return `<span class="warning-indicator warning-limit">⚠ Exceeds limit (>${constraint.limit}mm)</span>`;
+            } else {
+                return `<span class="warning-indicator warning-difficult">⚠ Below range</span>`;
+            }
         }
 
         // Available interval ratios for Sanfen Sunyi method
@@ -800,19 +866,37 @@
             const tbody = document.getElementById('simple-tbody');
             tbody.innerHTML = '';
             
+            // Calculate all positions first
+            const positions = [];
+            for (let i = 0; i < selectedIntervals.length; i++) {
+                const frequency = holeFrequencies[i + 1];
+                const effectiveLength = (speedOfSound / (2 * frequency)) - endCorrection;
+                positions.push(effectiveLength);
+            }
+            
+            // Build table rows with distance calculations
             for (let i = 0; i < selectedIntervals.length; i++) {
                 const frequency = holeFrequencies[i + 1];
                 const interval = selectedIntervals[i];
-                
-                const effectiveLength = (speedOfSound / (2 * frequency)) - endCorrection;
-                const position = effectiveLength.toFixed(2);
+                const position = positions[i].toFixed(2);
                 const note = getNoteName(frequency);
+                
+                // Calculate distance to next hole (center to center)
+                let distanceCell = '';
+                if (i < selectedIntervals.length - 1) {
+                    const distance = Math.abs(positions[i] - positions[i + 1]);
+                    const warningIndicator = evaluateHoleDistance(i, distance);
+                    distanceCell = `${distance.toFixed(2)} ${warningIndicator}`;
+                } else {
+                    distanceCell = '—';
+                }
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>Hole ${i + 1}</td>
                     <td>${frequency.toFixed(2)}</td>
                     <td>${position}</td>
+                    <td>${distanceCell}</td>
                     <td>${interval.name} (${interval.ratio.toFixed(3)})</td>
                     <td>${note}</td>
                 `;
