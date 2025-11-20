@@ -482,9 +482,10 @@
                     <div class="input-group">
                         <label for="simple-holes">Number of Holes:</label>
                         <select id="simple-holes" onchange="onHoleNumberChange()">
-                            <option value="5">5 holes</option>
-                            <option value="6" selected>6 holes</option>
-                            <option value="7">7 holes</option>
+                            <option value="4">4 holes (ultra minimaliste)</option>
+                            <option value="5">5 holes (super traditionnel)</option>
+                            <option value="6" selected>6 holes (le plus traditionnel)</option>
+                            <option value="7">7 holes (rare)</option>
                             <option value="8">8 holes</option>
                         </select>
                     </div>
@@ -493,14 +494,11 @@
             </div>
 
             <div id="simple-model-selection" class="input-section" style="display: none;">
-                <h3>Select Xiao Model (8 holes)</h3>
+                <h3 id="model-selection-title">Select Xiao Model</h3>
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; margin-bottom: 8px; color: #5d4a37; font-weight: bold;">Choose a model:</label>
                     <select id="simple-model" onchange="onModelChange()" style="width: 100%; padding: 12px; border: 2px solid #d4b896; border-radius: 8px; font-size: 1em; background: #fffcf7; font-family: 'Georgia', 'Palatino', serif;">
                         <option value="">-- Select a model --</option>
-                        <option value="pentatonic">Pentatonic Majeure Traditionnelle (la plus courante)</option>
-                        <option value="heptatonic">Heptatonique Traditionnelle (moins courante)</option>
-                        <option value="diatonic">Diatonique Moderne (occidentalisée)</option>
                     </select>
                 </div>
                 <div id="model-description" style="background: #fff8f0; padding: 20px; border-radius: 8px; border-left: 4px solid #8b6f47; display: none;">
@@ -736,26 +734,61 @@
             updateSimpleInputs();
             const numHoles = parseInt(document.getElementById('simple-holes').value);
             const calcButton = document.getElementById('simple-calculate-button');
+            const modelSelection = document.getElementById('simple-model-selection');
+            const modelSelect = document.getElementById('simple-model');
+            const modelTitle = document.getElementById('model-selection-title');
+            
+            // Reset model selection
+            modelSelect.innerHTML = '<option value="">-- Select a model --</option>';
+            document.getElementById('model-description').style.display = 'none';
+            document.getElementById('simple-interactive').style.display = 'none';
+            document.getElementById('simple-results').classList.add('hidden');
+            
+            // Populate model options based on number of holes
+            let hasModels = false;
             
             if (numHoles === 8) {
-                // Show model selection for 8 holes
-                document.getElementById('simple-model-selection').style.display = 'block';
+                modelTitle.textContent = 'Select Xiao Model (8 holes)';
+                modelSelect.innerHTML += '<option value="pentatonic_8">Pentatonic Majeure Traditionnelle (la plus courante)</option>';
+                modelSelect.innerHTML += '<option value="heptatonic_8">Heptatonique Traditionnelle (moins courante)</option>';
+                modelSelect.innerHTML += '<option value="diatonic_8">Diatonique Moderne (occidentalisée)</option>';
+                hasModels = true;
+            } else if (numHoles === 7) {
+                modelTitle.textContent = 'Select Xiao Model (7 holes)';
+                modelSelect.innerHTML += '<option value="pentatonic_7a">Pentatonique + 4e diatonique (Variante A)</option>';
+                modelSelect.innerHTML += '<option value="pentatonic_7b">Pentatonique + 7e mineure (Variante B)</option>';
+                hasModels = true;
+            } else if (numHoles === 6) {
+                modelTitle.textContent = 'Select Xiao Model (6 holes)';
+                modelSelect.innerHTML += '<option value="pentatonic_6">Pentatonique traditionnelle (le plus courant)</option>';
+                hasModels = true;
+            } else if (numHoles === 5) {
+                modelTitle.textContent = 'Select Xiao Model (5 holes)';
+                modelSelect.innerHTML += '<option value="pentatonic_5">Pentatonique pur (super traditionnel)</option>';
+                hasModels = true;
+            } else if (numHoles === 4) {
+                modelTitle.textContent = 'Select Xiao Model (4 holes)';
+                modelSelect.innerHTML += '<option value="pentatonic_4">Ultra minimaliste</option>';
+                hasModels = true;
+            }
+            
+            if (hasModels) {
+                // Show model selection for these hole configurations
+                modelSelection.style.display = 'block';
                 calcButton.style.display = 'none';
-                document.getElementById('simple-interactive').style.display = 'none';
-                document.getElementById('simple-results').classList.add('hidden');
             } else {
                 // Hide model selection and show calculate button for other numbers
-                document.getElementById('simple-model-selection').style.display = 'none';
+                modelSelection.style.display = 'none';
                 calcButton.style.display = 'block';
-                document.getElementById('simple-interactive').style.display = 'none';
-                document.getElementById('simple-results').classList.add('hidden');
             }
         }
 
-        // Model definitions for 8 holes
+        // Model definitions for different hole configurations
         const xiaoModels = {
-            pentatonic: {
+            // 8 holes models
+            pentatonic_8: {
                 name: "Xiao Pentatonique Majeure Traditionnelle",
+                holes: 8,
                 description: `
                     <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 1 — La xiao pentatonique majeure traditionnelle (la plus courante)</h3>
                     <p><strong>Gamme :</strong> Gong – Shang – Jue – Zhi – Yu</p>
@@ -776,8 +809,9 @@
                 `,
                 intervals: [0, 2, 4, 7, 9, 12, 14, 16] // semitones from base
             },
-            heptatonic: {
+            heptatonic_8: {
                 name: "Xiao Heptatonique Traditionnelle",
+                holes: 8,
                 description: `
                     <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 2 — Xiao heptatonique traditionnelle (moins courante)</h3>
                     <p>Dans certaines musiques rituelles ou locales, la xiao est accordée avec une gamme heptatonique ancienne, proche du mode mixolydien ou dorien selon la région.</p>
@@ -797,8 +831,9 @@
                 `,
                 intervals: [0, 2, 4, 5, 7, 9, 10, 12]
             },
-            diatonic: {
+            diatonic_8: {
                 name: "Xiao Diatonique Moderne",
+                holes: 8,
                 description: `
                     <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 SCÉNARIO 3 — Xiao diatonique moderne (occidentalisée)</h3>
                     <p>Utilisée par certains musiciens contemporains pour jouer des mélodies occidentales. Ici on force une gamme majeure complète.</p>
@@ -817,6 +852,114 @@
                     <p style="margin-top: 10px; font-style: italic; color: #6d5738;">C'est jouable, mais ergonomiquement difficile. Les trous se superposent souvent.</p>
                 `,
                 intervals: [0, 2, 4, 5, 7, 9, 11, 12]
+            },
+            // 7 holes models
+            pentatonic_7a: {
+                name: "Xiao 7 trous - Pentatonique + 4e diatonique",
+                holes: 7,
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟩 Xiao à 7 trous - Variante A (pentatonique + 4e diatonique)</h3>
+                    <p>Le 7e trou apporte une note de passage supplémentaire, enrichissant la gamme pentatonique traditionnelle.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Les 7 notes (avec intervalles) :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m3 (7)</li>
+                        <li>m2 (8)</li>
+                        <li>M2 (10)</li>
+                        <li>m3 (13)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +3 – +1 – +2 – +3</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">Assez peu courant, mais attesté dans certains styles anciens.</p>
+                `,
+                intervals: [0, 2, 4, 7, 8, 10, 13]
+            },
+            pentatonic_7b: {
+                name: "Xiao 7 trous - Pentatonique + 7e mineure",
+                holes: 7,
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟩 Xiao à 7 trous - Variante B (pentatonique + 7e mineure)</h3>
+                    <p>Cette variante ajoute une 7e mineure à la gamme pentatonique, offrant un doigté alternatif pour stabiliser certains micro-intervalles.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Les 7 notes (avec intervalles) :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m3 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>m2 (10)</li>
+                        <li>m3 (13)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +3 – +2 – +1 – +3</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">Rare mais attesté dans certains styles anciens et musiques traditionnelles locales.</p>
+                `,
+                intervals: [0, 2, 4, 7, 9, 10, 13]
+            },
+            // 6 holes model
+            pentatonic_6: {
+                name: "Xiao 6 trous - Pentatonique traditionnelle",
+                holes: 6,
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟦 Xiao à 6 trous (le plus traditionnel)</h3>
+                    <p>Pendant la plus grande partie de l'histoire, la xiao n'avait que 6 trous.</p>
+                    <p><strong>✔ Typiquement associés à la gamme pentatonique :</strong></p>
+                    <p>Gong – Shang – Jue – Zhi – Yu → donc : M2 – M2 – m3 – M2 – m3</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 6 trous = 5 intervalles + octave</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m3 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>m3 (12)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +3 – +2 – +3</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">C'est le modèle le plus ancien, le plus ergonomique, celui des xiao du Sud (nanxiao), celui utilisé dans beaucoup de musiques traditionnelles. C'est le scénario le plus courant pour "moins de 8 trous".</p>
+                `,
+                intervals: [0, 2, 4, 7, 9, 12]
+            },
+            // 5 holes model
+            pentatonic_5: {
+                name: "Xiao 5 trous - Pentatonique pur",
+                holes: 5,
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟥 Xiao à 5 trous (super traditionnel, le vrai pentatonique brut)</h3>
+                    <p>C'est une xiao primordiale, très épurée. Chaque trou correspond à une note de la pentatonique complète, sans "notes de passage".</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Structure exacte :</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>M2 (4)</li>
+                        <li>m3 (7)</li>
+                        <li>M2 (9)</li>
+                        <li>(+3 pour octave = 12)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +2 – +3 – +2 (+ octave)</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">On a vraiment que la pentatonique, rien d'autre. C'est courant dans certaines régions du Sichuan, dans les instruments de cérémonie, dans les flûtes anciennes en bambou massif. Très authentique, plus simple et très ergonomique. Beaucoup plus facile à fabriquer : les trous sont bien espacés.</p>
+                `,
+                intervals: [0, 2, 4, 7, 9]
+            },
+            // 4 holes model
+            pentatonic_4: {
+                name: "Xiao 4 trous - Ultra minimaliste",
+                holes: 4,
+                description: `
+                    <h3 style="color: #6d5738; margin-bottom: 15px;">🟧 Xiao à 4 trous (ultra minimaliste)</h3>
+                    <p>Rare mais attestée dans certaines traditions chamaniques, des flûtes de méditation ou funéraires, des instruments folkloriques dépouillés.</p>
+                    <h4 style="color: #8b6f47; margin-top: 15px; margin-bottom: 10px;">🎵 Structure :</h4>
+                    <p>C'est une pentatonique réduite, souvent :</p>
+                    <ul style="line-height: 1.8;">
+                        <li>Tonique (0)</li>
+                        <li>M2 (2)</li>
+                        <li>m3 (5)</li>
+                        <li>M2 (7)</li>
+                        <li>(+3 pour octave si besoin)</li>
+                    </ul>
+                    <p><strong>✔ Résumé des intervalles :</strong> +2 – +3 – +2</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6d5738;">On retire deux degrés de la pentatonique. Ce sont des flûtes "à rôle", pas mélodiques au sens occidental.</p>
+                `,
+                intervals: [0, 2, 5, 7]
             }
         };
 
