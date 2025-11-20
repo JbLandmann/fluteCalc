@@ -1159,11 +1159,11 @@
                         } else if (distance < 15) {
                             warningCell = '<span class="warning-indicator warning-difficult">⚠ Trous rapprochés</span>';
                         } else {
-                            warningCell = '<span class="warning-indicator warning-comfortable">✓ OK</span>';
+                            warningCell = '';
                         }
                     } else {
-                        // For special holes, just show OK without distance checking
-                        warningCell = '<span class="warning-indicator warning-comfortable">✓ OK</span>';
+                        // For special holes, no warning needed
+                        warningCell = '';
                     }
                 } else {
                     distanceCell = '—';
