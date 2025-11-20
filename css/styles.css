@@ -29,6 +29,8 @@ header {
     display: flex;
     align-items: center;
     gap: 30px;
+    flex-wrap: wrap;
+    position: relative;
 }
 
 header h1 {
@@ -37,6 +39,37 @@ header h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     margin: 0;
     flex-shrink: 0;
+}
+
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    gap: 8px;
+}
+
+.language-selector button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.language-selector button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.language-selector button.active {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .tabs {

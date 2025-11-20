@@ -233,7 +233,7 @@ function onHoleNumberChange() {
     const modelTitle = document.getElementById('model-selection-title');
     
     // Reset model selection
-    modelSelect.innerHTML = '<option value="">-- Select a model --</option>';
+    modelSelect.innerHTML = `<option value="" data-i18n="select_model_placeholder">${i18n.t('select_model_placeholder')}</option>`;
     document.getElementById('model-description').style.display = 'none';
     document.getElementById('simple-interactive').style.display = 'none';
     document.getElementById('simple-results').classList.add('hidden');
@@ -243,27 +243,27 @@ function onHoleNumberChange() {
     let hasModels = false;
     
     if (numHoles === 8) {
-        modelTitle.textContent = 'Select Xiao Model (8 holes)';
-        modelSelect.innerHTML += '<option value="pentatonic_8">Pentatonic Majeure Traditionnelle (la plus courante)</option>';
-        modelSelect.innerHTML += '<option value="heptatonic_8">Heptatonique Traditionnelle (moins courante)</option>';
-        modelSelect.innerHTML += '<option value="diatonic_8">Diatonique Moderne (occidentalisée)</option>';
+        modelTitle.textContent = i18n.t('select_model_8');
+        modelSelect.innerHTML += `<option value="pentatonic_8">${i18n.t('model_pentatonic_8')}</option>`;
+        modelSelect.innerHTML += `<option value="heptatonic_8">${i18n.t('model_heptatonic_8')}</option>`;
+        modelSelect.innerHTML += `<option value="diatonic_8">${i18n.t('model_diatonic_8')}</option>`;
         hasModels = true;
     } else if (numHoles === 7) {
-        modelTitle.textContent = 'Select Xiao Model (7 holes)';
-        modelSelect.innerHTML += '<option value="pentatonic_7a">Pentatonique + 4e diatonique (Variante A)</option>';
-        modelSelect.innerHTML += '<option value="pentatonic_7b">Pentatonique + 7e mineure (Variante B)</option>';
+        modelTitle.textContent = i18n.t('select_model_7');
+        modelSelect.innerHTML += `<option value="pentatonic_7a">${i18n.t('model_pentatonic_7a')}</option>`;
+        modelSelect.innerHTML += `<option value="pentatonic_7b">${i18n.t('model_pentatonic_7b')}</option>`;
         hasModels = true;
     } else if (numHoles === 6) {
-        modelTitle.textContent = 'Select Xiao Model (6 holes)';
-        modelSelect.innerHTML += '<option value="pentatonic_6">Pentatonique traditionnelle (le plus courant)</option>';
+        modelTitle.textContent = i18n.t('select_model_6');
+        modelSelect.innerHTML += `<option value="pentatonic_6">${i18n.t('model_pentatonic_6')}</option>`;
         hasModels = true;
     } else if (numHoles === 5) {
-        modelTitle.textContent = 'Select Xiao Model (5 holes)';
-        modelSelect.innerHTML += '<option value="pentatonic_5">Pentatonique pur (super traditionnel)</option>';
+        modelTitle.textContent = i18n.t('select_model_5');
+        modelSelect.innerHTML += `<option value="pentatonic_5">${i18n.t('model_pentatonic_5')}</option>`;
         hasModels = true;
     } else if (numHoles === 4) {
-        modelTitle.textContent = 'Select Xiao Model (4 holes)';
-        modelSelect.innerHTML += '<option value="pentatonic_4">Ultra minimaliste</option>';
+        modelTitle.textContent = i18n.t('select_model_4');
+        modelSelect.innerHTML += `<option value="pentatonic_4">${i18n.t('model_pentatonic_4')}</option>`;
         hasModels = true;
     }
     
@@ -434,7 +434,7 @@ function calculateSimple() {
     
     // For 8 holes, use model selection instead
     if (numHoles === 8) {
-        alert('Pour 8 trous, veuillez sélectionner un modèle ci-dessus.');
+        alert(i18n.t('alert_select_model', { holes: '8' }));
         return;
     }
     
@@ -487,7 +487,7 @@ function buildHoleSelector(holeIndex, totalHoles) {
     
     if (holeIndex >= totalHoles) {
         // All holes configured
-        builder.innerHTML = '<p style="color: #6d5738; font-weight: bold;">✓ All holes configured! The table below shows your custom scale.</p>';
+        builder.innerHTML = `<p style="color: #6d5738; font-weight: bold;">${i18n.t('all_holes_configured')}</p>`;
         return;
     }
     
@@ -496,9 +496,9 @@ function buildHoleSelector(holeIndex, totalHoles) {
     const div = document.createElement('div');
     div.innerHTML = `
         <div style="background: #fff8f0; padding: 20px; border-radius: 8px; border: 2px solid #d4b896;">
-            <h4 style="color: #6d5738; margin-bottom: 15px;">Configure Hole ${holeIndex + 1}</h4>
-            <p style="margin-bottom: 10px;"><strong>Current Frequency:</strong> ${currentFreq.toFixed(2)} Hz (${getNoteName(currentFreq)})</p>
-            <label style="display: block; margin-bottom: 8px; color: #5d4a37; font-weight: bold;">Choose next interval:</label>
+            <h4 style="color: #6d5738; margin-bottom: 15px;">${i18n.t('configure_hole', { number: holeIndex + 1 })}</h4>
+            <p style="margin-bottom: 10px;"><strong>${i18n.t('current_frequency')}</strong> ${currentFreq.toFixed(2)} Hz (${getNoteName(currentFreq)})</p>
+            <label style="display: block; margin-bottom: 8px; color: #5d4a37; font-weight: bold;">${i18n.t('choose_interval')}</label>
             <select id="interval-select-${holeIndex}" style="width: 100%; padding: 12px; border: 2px solid #d4b896; border-radius: 8px; font-size: 1em; background: #fffcf7; font-family: 'Georgia', 'Palatino', serif; margin-bottom: 15px;">
                 ${intervalRatios.map((interval, idx) => {
                     const nextFreq = currentFreq * interval.ratio;
@@ -507,7 +507,7 @@ function buildHoleSelector(holeIndex, totalHoles) {
                 }).join('')}
             </select>
             <button onclick="selectInterval(${holeIndex}, ${totalHoles})" style="background: linear-gradient(135deg, #8b6f47 0%, #6d5738 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; font-family: 'Georgia', 'Palatino', serif;">
-                ${holeIndex < totalHoles - 1 ? 'Next Hole →' : 'Finish Scale'}
+                ${holeIndex < totalHoles - 1 ? i18n.t('next_hole') : i18n.t('finish_scale')}
             </button>
         </div>
     `;

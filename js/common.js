@@ -50,7 +50,7 @@ function getNoteName(frequency) {
 // Show visualization modal
 function showVisualization() {
     if (!currentFluteData) {
-        alert('Veuillez d\'abord calculer les positions des trous.');
+        alert(i18n.t('alert_calculate_first'));
         return;
     }
     
