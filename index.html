@@ -362,6 +362,81 @@
             color: #721c24;
         }
 
+        /* Modal/Backdrop styles */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #8b6f47;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #6d5738;
+            transform: rotate(90deg);
+        }
+
+        .visualization-button {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5a3a 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+            font-family: 'Georgia', 'Palatino', serif;
+            margin-top: 20px;
+        }
+
+        .visualization-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 124, 89, 0.4);
+        }
+
+        .flute-svg {
+            width: 100%;
+            max-height: 800px;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -515,6 +590,7 @@
 
             <div id="simple-results" class="results-section hidden">
                 <h3>Calculated Hole Positions</h3>
+                <button class="visualization-button" onclick="showVisualization()">👁️ Visualisation de la flûte</button>
                 <table id="simple-table">
                     <thead>
                         <tr>
@@ -709,6 +785,17 @@
         <footer>
             <p>Crafted with care for flute makers worldwide 🌿</p>
         </footer>
+    </div>
+
+    <!-- Visualization Modal -->
+    <div id="visualization-modal" class="modal-backdrop" onclick="closeVisualizationIfBackdrop(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeVisualization()">×</button>
+            <h2 style="color: #6d5738; margin-bottom: 20px; text-align: center;">Visualisation de la Flûte</h2>
+            <div id="flute-drawing-container">
+                <!-- SVG will be inserted here -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -982,6 +1069,29 @@
             calculateWithModel(model);
         }
 
+        // Check if a hole pair should be excluded from overlap warnings
+        // i is the index of the first hole in the pair (0-based)
+        function isSpecialHolePair(holeIndex, totalHoles) {
+            // For 8 holes: 
+            // - hole 1 (index 0) is for pinky (left or right)
+            // - hole 8 (index 7) is back hole
+            if (totalHoles === 8) {
+                // Skip warning for hole 1 to hole 2 (index 0)
+                if (holeIndex === 0) return true;
+                // Skip warning for hole 7 to hole 8 (index 6)
+                if (holeIndex === 6) return true;
+            }
+            
+            // For 7 holes:
+            // - hole 7 (index 6) is back hole
+            if (totalHoles === 7) {
+                // Skip warning for hole 6 to hole 7 (index 5)
+                if (holeIndex === 5) return true;
+            }
+            
+            return false;
+        }
+
         // Calculate positions based on selected model
         function calculateWithModel(model) {
             const baseFreq = parseFloat(document.getElementById('simple-base-frequency').value);
@@ -1010,7 +1120,9 @@
             
             // Build table rows with warnings about hole overlap
             let hasOverlapWarning = false;
-            for (let i = 0; i < model.intervals.length; i++) {
+            const numHoles = model.intervals.length;
+            
+            for (let i = 0; i < numHoles; i++) {
                 const frequency = frequencies[i];
                 const position = positions[i];
                 const note = getNoteName(frequency);
@@ -1019,17 +1131,28 @@
                 // Calculate distance to next hole
                 let distanceCell = '';
                 let warningCell = '';
-                if (i < model.intervals.length - 1) {
+                if (i < numHoles - 1) {
                     const distance = Math.abs(positions[i] - positions[i + 1]);
                     distanceCell = distance.toFixed(2);
                     
+                    // Determine if we should check for overlap warnings
+                    // Skip warning checks for special holes:
+                    // - For 8 holes: hole 1 is for pinky (left/right), hole 8 is back hole
+                    // - For 7 holes: hole 7 is back hole
+                    const shouldCheckOverlap = !isSpecialHolePair(i, numHoles);
+                    
                     // Check for overlap risk (holes too close, less than 10mm)
-                    if (distance < 10) {
-                        warningCell = '<span class="warning-indicator warning-limit">⚠ Risque de superposition</span>';
-                        hasOverlapWarning = true;
-                    } else if (distance < 15) {
-                        warningCell = '<span class="warning-indicator warning-difficult">⚠ Trous rapprochés</span>';
+                    if (shouldCheckOverlap) {
+                        if (distance < 10) {
+                            warningCell = '<span class="warning-indicator warning-limit">⚠ Risque de superposition</span>';
+                            hasOverlapWarning = true;
+                        } else if (distance < 15) {
+                            warningCell = '<span class="warning-indicator warning-difficult">⚠ Trous rapprochés</span>';
+                        } else {
+                            warningCell = '<span class="warning-indicator warning-comfortable">✓ OK</span>';
+                        }
                     } else {
+                        // For special holes, just show OK without distance checking
                         warningCell = '<span class="warning-indicator warning-comfortable">✓ OK</span>';
                     }
                 } else {
@@ -1061,6 +1184,13 @@
                 `;
                 tbody.appendChild(warningRow);
             }
+            
+            // Store data for visualization
+            currentFluteData = {
+                positions: positions,
+                numHoles: numHoles,
+                diameter: diameter
+            };
             
             document.getElementById('simple-results').classList.remove('hidden');
         }
@@ -1454,6 +1584,164 @@
             }
             
             document.getElementById('benade-results').classList.remove('hidden');
+        }
+
+        // Global variable to store current flute data for visualization
+        let currentFluteData = null;
+
+        // Show visualization modal
+        function showVisualization() {
+            if (!currentFluteData) {
+                alert('Veuillez d\'abord calculer les positions des trous.');
+                return;
+            }
+            
+            // Generate SVG
+            const svg = generateFluteSVG(currentFluteData);
+            document.getElementById('flute-drawing-container').innerHTML = svg;
+            
+            // Show modal
+            document.getElementById('visualization-modal').classList.add('active');
+        }
+
+        // Close visualization modal
+        function closeVisualization() {
+            document.getElementById('visualization-modal').classList.remove('active');
+        }
+
+        // Close if clicking on backdrop
+        function closeVisualizationIfBackdrop(event) {
+            if (event.target.id === 'visualization-modal') {
+                closeVisualization();
+            }
+        }
+
+        // Generate SVG drawing of the flute
+        function generateFluteSVG(fluteData) {
+            const { positions, numHoles, diameter } = fluteData;
+            
+            // Calculate SVG dimensions
+            const maxPosition = Math.max(...positions);
+            const fluteLength = maxPosition + 50; // Add some margin
+            
+            // SVG scaling factor (pixels per mm)
+            const scale = 1.5;
+            const svgHeight = fluteLength * scale;
+            const svgWidth = 300;
+            
+            // Flute tube dimensions
+            const tubeWidth = diameter * scale;
+            const tubeX = (svgWidth - tubeWidth) / 2;
+            
+            // Default hole diameter (8mm)
+            const holeRadius = 4 * scale;
+            
+            let svg = `
+                <svg class="flute-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="${svgWidth}" height="${svgHeight}" fill="#f5e6d3"/>
+                    
+                    <!-- Flute tube -->
+                    <rect x="${tubeX}" y="0" width="${tubeWidth}" height="${svgHeight}" 
+                          fill="#d4b896" stroke="#8b6f47" stroke-width="2" rx="5"/>
+                    
+                    <!-- Wood grain effect -->
+                    <rect x="${tubeX}" y="0" width="${tubeWidth}" height="${svgHeight}" 
+                          fill="url(#woodGrain)" opacity="0.3" rx="5"/>
+                    
+                    <!-- Blowing edge (embouchure) -->
+                    <ellipse cx="${svgWidth / 2}" cy="20" rx="${tubeWidth / 2 + 5}" ry="10" 
+                             fill="#6d5738" stroke="#5d4a37" stroke-width="2"/>
+                    <text x="${svgWidth / 2}" y="50" text-anchor="middle" font-size="12" fill="#3e2723" font-weight="bold">
+                        Embouchure
+                    </text>
+            `;
+            
+            // Draw holes
+            for (let i = 0; i < numHoles; i++) {
+                const position = positions[i] * scale;
+                let holeX = svgWidth / 2;
+                
+                // Special positioning rules:
+                // For 8 holes: hole 1 is left/right (pinky), hole 8 is back
+                // For 7 holes: hole 7 is back
+                let isBackHole = false;
+                let isPinkyHole = false;
+                
+                if (numHoles === 8) {
+                    if (i === 0) {
+                        // Hole 1 - pinky hole (offset to right)
+                        holeX = svgWidth / 2 + tubeWidth / 2 - 5;
+                        isPinkyHole = true;
+                    } else if (i === 7) {
+                        // Hole 8 - back hole
+                        holeX = svgWidth / 2 - tubeWidth / 2 - 5;
+                        isBackHole = true;
+                    }
+                } else if (numHoles === 7 && i === 6) {
+                    // Hole 7 - back hole
+                    holeX = svgWidth / 2 - tubeWidth / 2 - 5;
+                    isBackHole = true;
+                }
+                
+                // Draw hole
+                svg += `
+                    <circle cx="${holeX}" cy="${position}" r="${holeRadius}" 
+                            fill="${isBackHole ? '#4a5d4a' : '#3e2723'}" 
+                            stroke="${isBackHole || isPinkyHole ? '#ff6b6b' : '#2d1f1a'}" 
+                            stroke-width="2"/>
+                `;
+                
+                // Label
+                let label = `Trou ${i + 1}`;
+                if (isBackHole) label += ' (dos)';
+                if (isPinkyHole) label += ' (auriculaire)';
+                
+                const labelX = holeX + holeRadius + 15;
+                svg += `
+                    <text x="${labelX}" y="${position + 4}" font-size="11" fill="#3e2723">
+                        ${label}
+                    </text>
+                    <text x="${labelX}" y="${position + 16}" font-size="9" fill="#6d5738" font-style="italic">
+                        ${positions[i].toFixed(1)} mm
+                    </text>
+                `;
+                
+                // Draw distance lines between holes
+                if (i < numHoles - 1) {
+                    const nextPosition = positions[i + 1] * scale;
+                    const midY = (position + nextPosition) / 2;
+                    const lineX = tubeX - 20;
+                    const distance = Math.abs(positions[i] - positions[i + 1]);
+                    
+                    svg += `
+                        <line x1="${lineX}" y1="${position}" x2="${lineX}" y2="${nextPosition}" 
+                              stroke="#8b6f47" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="${lineX - 3}" y1="${position}" x2="${lineX + 3}" y2="${position}" 
+                              stroke="#8b6f47" stroke-width="1"/>
+                        <line x1="${lineX - 3}" y1="${nextPosition}" x2="${lineX + 3}" y2="${nextPosition}" 
+                              stroke="#8b6f47" stroke-width="1"/>
+                        <text x="${lineX - 5}" y="${midY}" font-size="9" fill="#6d5738" text-anchor="end">
+                            ${distance.toFixed(1)}mm
+                        </text>
+                    `;
+                }
+            }
+            
+            // Add wood grain pattern definition
+            svg = `
+                <svg class="flute-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="woodGrain" patternUnits="userSpaceOnUse" width="20" height="100">
+                            <path d="M0,0 Q10,50 0,100" stroke="#8b6f47" stroke-width="0.5" fill="none" opacity="0.3"/>
+                            <path d="M10,0 Q20,50 10,100" stroke="#8b6f47" stroke-width="0.5" fill="none" opacity="0.3"/>
+                        </pattern>
+                    </defs>
+                    ${svg.substring(svg.indexOf('<!-- Background -->'))}
+                </svg>
+            `;
+            
+            return svg;
         }
     </script>
 </body>
