@@ -516,15 +516,6 @@
                         <li><strong>Hole position:</strong> Position = L_eff - δ (from blowing edge)</li>
                     </ul>
 
-                    <h3>Empirical Approach for Flute Crafters:</h3>
-                    <p>This calculator provides theoretical positions, but flute making requires an empirical approach:</p>
-                    <ul>
-                        <li><strong>Start small:</strong> Begin by drilling holes smaller than calculated</li>
-                        <li><strong>Test and adjust:</strong> Gradually enlarge each hole while testing the pitch</li>
-                        <li><strong>Work systematically:</strong> Start from the lowest pitch (furthest hole) and move toward the highest (closest to blowing edge)</li>
-                        <li><strong>Fine-tune:</strong> Small adjustments in hole size significantly affect pitch</li>
-                    </ul>
-
                     <h3>Traditional Intervals:</h3>
                     <ul>
                         <li><strong>Perfect Fifth (3/2):</strong> Up 7 semitones, ratio 1.5</li>
@@ -533,6 +524,17 @@
                         <li><strong>Minor Third (6/5):</strong> Up 3 semitones, ratio 1.2</li>
                         <li><strong>Major Second (9/8):</strong> Up 2 semitones, ratio 1.125</li>
                     </ul>
+
+                    <div style="background: #fff3cd; border: 3px solid #856404; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                        <h3 style="color: #856404; margin-bottom: 15px;">⚠️ Empirical Approach for Flute Crafters</h3>
+                        <p style="color: #856404;"><strong>Important:</strong> This calculator provides theoretical positions, but flute making requires an empirical approach:</p>
+                        <ul style="color: #856404;">
+                            <li><strong>Start small:</strong> Begin by drilling holes smaller than calculated</li>
+                            <li><strong>Test and adjust:</strong> Gradually enlarge each hole while testing the pitch</li>
+                            <li><strong>Work systematically:</strong> Start from the lowest pitch (furthest hole) and move toward the highest (closest to blowing edge)</li>
+                            <li><strong>Fine-tune:</strong> Small adjustments in hole size significantly affect pitch</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -541,7 +543,7 @@
                 <div class="input-grid">
                     <div class="input-group">
                         <label for="simple-base-frequency">Base Frequency (Hz):</label>
-                        <input type="number" id="simple-base-frequency" value="440" min="100" max="1000" step="0.01" oninput="updateSimpleInputs()">
+                        <input type="number" id="simple-base-frequency" value="440" min="100" max="1000" step="1" oninput="updateSimpleInputs()">
                         <div class="input-hint">Fundamental frequency of your bamboo (A4 = 440 Hz, D4 = 293.66 Hz, G4 = 392 Hz)</div>
                     </div>
                     <div class="input-group">
@@ -594,12 +596,12 @@
                 <table id="simple-table">
                     <thead>
                         <tr>
-                            <th>Hole Number</th>
-                            <th>Frequency (Hz)</th>
+                            <th>Trou</th>
                             <th>Distance from Blowing Edge (mm)</th>
                             <th>Distance to Next Hole (mm)</th>
                             <th>Interval</th>
                             <th>Note</th>
+                            <th>Frequency (Hz)</th>
                         </tr>
                     </thead>
                     <tbody id="simple-tbody">
@@ -649,7 +651,7 @@
                 <div class="input-grid">
                     <div class="input-group">
                         <label for="acoustical-frequency">Base Frequency (Hz):</label>
-                        <input type="number" id="acoustical-frequency" value="293.66" min="100" max="1000" step="0.01" oninput="updateAcousticalInputs()">
+                        <input type="number" id="acoustical-frequency" value="293.66" min="100" max="1000" step="1" oninput="updateAcousticalInputs()">
                         <div class="input-hint">Fundamental frequency (D4 = 293.66 Hz)</div>
                     </div>
                     <div class="input-group">
@@ -680,10 +682,10 @@
                 <table id="acoustical-table">
                     <thead>
                         <tr>
-                            <th>Hole Number</th>
+                            <th>Trou</th>
                             <th>Distance from Blowing Edge (mm)</th>
-                            <th>Frequency (Hz)</th>
                             <th>Note</th>
+                            <th>Frequency (Hz)</th>
                         </tr>
                     </thead>
                     <tbody id="acoustical-tbody">
@@ -770,7 +772,7 @@
                 <table id="benade-table">
                     <thead>
                         <tr>
-                            <th>Hole Number</th>
+                            <th>Trou</th>
                             <th>Distance from Blowing Edge (mm)</th>
                             <th>Corrected Position (mm)</th>
                             <th>Note</th>
@@ -814,6 +816,11 @@
             document.getElementById('simple-input-diameter').textContent = document.getElementById('simple-diameter').value;
             document.getElementById('simple-input-temp').textContent = document.getElementById('simple-temp').value;
             document.getElementById('simple-input-holes').textContent = document.getElementById('simple-holes').value;
+            
+            // Auto-recalculate if a model is already selected
+            if (currentSelectedModel !== null) {
+                calculateWithModel(currentSelectedModel);
+            }
         }
 
         // Handle hole number change
@@ -830,6 +837,7 @@
             document.getElementById('model-description').style.display = 'none';
             document.getElementById('simple-interactive').style.display = 'none';
             document.getElementById('simple-results').classList.add('hidden');
+            currentSelectedModel = null; // Reset current model
             
             // Populate model options based on number of holes
             let hasModels = false;
@@ -1058,10 +1066,12 @@
             if (modelKey === '') {
                 descDiv.style.display = 'none';
                 document.getElementById('simple-results').classList.add('hidden');
+                currentSelectedModel = null;
                 return;
             }
             
             const model = xiaoModels[modelKey];
+            currentSelectedModel = model; // Store current model
             descDiv.innerHTML = model.description;
             descDiv.style.display = 'block';
             
@@ -1162,12 +1172,12 @@
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>Trou ${i + 1}</td>
-                    <td>${frequency.toFixed(2)}</td>
+                    <td>${i + 1}</td>
                     <td>${position.toFixed(2)}</td>
                     <td>${distanceCell}</td>
                     <td>+${semitone} demi-tons</td>
                     <td>${note} ${warningCell}</td>
+                    <td>${frequency.toFixed(2)}</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -1285,6 +1295,7 @@
         let holeFrequencies = [];
         let selectedIntervals = [];
         let preCalculatedPositions = []; // Store pre-calculated positions for all intervals
+        let currentSelectedModel = null; // Track currently selected model for auto-recalculation
 
         // Simple Ratio Method (Xiao Flute - Sanfen Sunyi)
         function calculateSimple() {
@@ -1478,12 +1489,12 @@
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>Hole ${i + 1}</td>
-                    <td>${frequency.toFixed(2)}</td>
+                    <td>${i + 1}</td>
                     <td>${position}</td>
                     <td>${distanceCell}</td>
                     <td>${interval.name} (${interval.ratio.toFixed(3)})</td>
                     <td>${note}</td>
+                    <td>${frequency.toFixed(2)}</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -1532,10 +1543,10 @@
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>Hole ${i + 1}</td>
+                    <td>${i + 1}</td>
                     <td>${position}</td>
-                    <td>${frequency}</td>
                     <td>${note}</td>
+                    <td>${frequency}</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -1575,7 +1586,7 @@
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>Hole ${i + 1}</td>
+                    <td>${i + 1}</td>
                     <td>${basicPosition.toFixed(2)}</td>
                     <td>${correctedPosition}</td>
                     <td>${note}</td>
