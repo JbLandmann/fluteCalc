@@ -152,87 +152,289 @@
             </div>
         </div>
 
-        <!-- Acoustical Physics Method Tab -->
+        <!-- Reverse Engineering Acoustics Tab -->
         <div id="acoustical" class="tab-content">
             <div class="algorithm-explanation">
                 <div class="algorithm-explanation-header" onclick="toggleAlgorithm('acoustical-algo')">
-                    <h2 data-i18n="algo_acoustical_title">Acoustical Physics Method</h2>
+                    <h2 data-i18n="algo_acoustical_title">Reverse Engineering Acoustics</h2>
                     <span class="algorithm-explanation-toggle" id="acoustical-algo-toggle">▼</span>
                 </div>
                 <div class="algorithm-explanation-content" id="acoustical-algo-content">
-                    <div class="algorithm-inputs" id="acoustical-algo-inputs">
-                        <strong data-i18n="algo_current_inputs">Current Inputs:</strong><br>
-                        <span data-i18n="algo_base_frequency">Base Frequency:</span> <span id="acoustical-input-frequency">293.66</span> Hz<br>
-                        <span data-i18n="algo_inner_diameter">Inner Diameter:</span> <span id="acoustical-input-diameter">19</span> mm<br>
-                        <span data-i18n="algo_temperature">Temperature:</span> <span id="acoustical-input-temp">20</span> °C<br>
-                        <span data-i18n="algo_number_of_holes">Number of Holes:</span> <span id="acoustical-input-holes">6</span>
-                    </div>
-                    <p data-i18n="algo_acoustical_intro">This method uses fundamental acoustic principles to calculate hole positions based on the speed of sound, desired frequencies, and the physical properties of the flute.</p>
+                    <p data-i18n="algo_acoustical_intro">This advanced method combines Inverse Acoustic Modeling, Node Shift Compensation, and Modified Benade principles to design flutes with precision.</p>
                     
                     <h3 data-i18n="algo_xiao_how_title">How it Works:</h3>
                     <ul>
-                        <li data-i18n-html="algo_acoustical_how_1">Uses the relationship: <span class="formula">f = v / (2 × L)</span> where f is frequency, v is speed of sound, L is effective length</li>
-                        <li data-i18n="algo_acoustical_how_2">Accounts for end corrections based on bore diameter</li>
-                        <li data-i18n="algo_acoustical_how_3">Considers temperature and humidity effects on sound velocity</li>
-                        <li data-i18n="algo_acoustical_how_4">More accurate for precise tuning requirements</li>
+                        <li data-i18n-html="algo_acoustical_how_1"><strong>Inverse Acoustic Modeling:</strong> Calculate acoustic length from measured frequencies</li>
+                        <li data-i18n-html="algo_acoustical_how_2"><strong>Node Shift Compensation:</strong> Account for the displacement of the quarter-wave node</li>
+                        <li data-i18n-html="algo_acoustical_how_3"><strong>Modified Benade Method:</strong> Adapted for quarter-wave flutes</li>
+                        <li data-i18n-html="algo_acoustical_how_4"><strong>Tone Hole Correction:</strong> Empirical adjustments based on hole diameter</li>
                     </ul>
 
                     <h3 data-i18n="algo_calc_details_title">Calculation Details:</h3>
-                    <p data-i18n="algo_calc_details_intro">The effective length for each note is calculated as:</p>
                     <ul>
-                        <li data-i18n-html="algo_acoustical_calc_1"><strong>Speed of sound:</strong> v ≈ 343 m/s (at 20°C)</li>
-                        <li data-i18n-html="algo_acoustical_calc_2"><strong>End correction:</strong> δ ≈ 0.6 × diameter</li>
-                        <li data-i18n-html="algo_acoustical_calc_3"><strong>Effective length:</strong> L_eff = v / (2 × f) - δ</li>
-                        <li data-i18n-html="algo_acoustical_calc_4"><strong>Hole position:</strong> Distance from embouchure hole</li>
+                        <li data-i18n-html="algo_acoustical_calc_1"><strong>Speed of sound:</strong> v = 331.4 + 0.6 × T (m/s)</li>
+                        <li data-i18n-html="algo_acoustical_calc_2"><strong>Effective length:</strong> L_eff = v / (4 × f) for quarter-wave</li>
+                        <li data-i18n-html="algo_acoustical_calc_3"><strong>Node shift:</strong> Δ = L_eff - L_phys</li>
+                        <li data-i18n-html="algo_acoustical_calc_4"><strong>Corrected position:</strong> x = L_eff - Δ - C</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="input-section">
-                <h3>Input Parameters</h3>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label for="acoustical-frequency">Base Frequency (Hz):</label>
-                        <input type="number" id="acoustical-frequency" value="293.66" min="100" max="1000" step="1" oninput="updateAcousticalInputs()">
-                        <div class="input-hint">Fundamental frequency (D4 = 293.66 Hz)</div>
+            <!-- Step-based Form Wizard -->
+            <div id="acoustical-step-container">
+                <!-- Step 0: Flute Type Selection -->
+                <div class="step-section" id="step-0" style="display: block;">
+                    <div class="step-header" onclick="toggleStep('step-0')">
+                        <h3 data-i18n="step_0_title">Step 0: Select Flute Type</h3>
+                        <span class="step-toggle">▼</span>
                     </div>
-                    <div class="input-group">
-                        <label for="acoustical-diameter">Inner Diameter (mm):</label>
-                        <input type="number" id="acoustical-diameter" value="19" min="10" max="50" step="0.5" oninput="updateAcousticalInputs()">
-                        <div class="input-hint">Internal bore diameter</div>
-                    </div>
-                    <div class="input-group">
-                        <label for="acoustical-temp">Temperature (°C):</label>
-                        <input type="number" id="acoustical-temp" value="20" min="-10" max="40" step="1" oninput="updateAcousticalInputs()">
-                        <div class="input-hint">Ambient temperature affects sound velocity</div>
-                    </div>
-                    <div class="input-group">
-                        <label for="acoustical-holes">Number of Holes:</label>
-                        <select id="acoustical-holes" onchange="updateAcousticalInputs()">
-                            <option value="5">5 holes</option>
-                            <option value="6" selected>6 holes</option>
-                            <option value="7">7 holes</option>
-                            <option value="8">8 holes</option>
-                        </select>
+                    <div class="step-content">
+                        <p class="step-description" data-i18n="step_0_desc">Choose the type of flute you want to design.</p>
+                        <div class="input-group">
+                            <label for="flute-type" data-i18n="flute_type">Flute Type:</label>
+                            <select id="flute-type">
+                                <option value="native" data-i18n="flute_type_native">Native American Flute (Quarter-wave)</option>
+                                <option value="transverse" data-i18n="flute_type_transverse">Transverse Flute (Open both ends)</option>
+                                <option value="bansuri" data-i18n="flute_type_bansuri">Bansuri / Simple Open Flute</option>
+                                <option value="xiao" data-i18n="flute_type_xiao">Xiao (Conical)</option>
+                                <option value="shakuhachi" data-i18n="flute_type_shakuhachi">Shakuhachi</option>
+                                <option value="piccolo" data-i18n="flute_type_piccolo">Piccolo</option>
+                                <option value="recorder" data-i18n="flute_type_recorder">Recorder / Block Flute</option>
+                                <option value="didgeridoo" data-i18n="flute_type_didgeridoo">Didgeridoo</option>
+                            </select>
+                        </div>
+                        <button class="calculate-button" onclick="nextAcousticalStep(1)" data-i18n="next_step">Next Step →</button>
                     </div>
                 </div>
-                <button class="calculate-button" onclick="calculateAcoustical()">Calculate Positions</button>
-            </div>
 
-            <div id="acoustical-results" class="results-section hidden">
-                <h3>Calculated Hole Positions</h3>
-                <table id="acoustical-table">
-                    <thead>
-                        <tr>
-                            <th>Trou</th>
-                            <th>Distance from Blowing Edge (mm)</th>
-                            <th>Note</th>
-                            <th>Frequency (Hz)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="acoustical-tbody">
-                    </tbody>
-                </table>
+                <!-- Step 1: Speed of Sound -->
+                <div class="step-section" id="step-1" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-1')">
+                        <h3 data-i18n="step_1_title">Step 1: Speed of Sound</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_1_desc">Calculate the speed of sound based on temperature.</p>
+                        <div class="input-group">
+                            <label for="temperature" data-i18n="temperature_label">Temperature (°C):</label>
+                            <input type="number" id="temperature" value="20" min="-10" max="40" step="1">
+                        </div>
+                        <div id="speed-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <strong data-i18n="speed_of_sound">Speed of Sound:</strong> <span id="speed-value">343.4</span> m/s
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(0)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateSpeed()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(2)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Measured Effective Lengths -->
+                <div class="step-section" id="step-2" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-2')">
+                        <h3 data-i18n="step_2_title">Step 2: Measured Effective Lengths</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_2_desc">Measure fundamental frequency with different breath pressures.</p>
+                        <div class="input-group">
+                            <label for="physical-length" data-i18n="physical_length">Physical Length (mm):</label>
+                            <input type="number" id="physical-length" value="400" min="100" max="1000" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="freq-low" data-i18n="freq_low_breath">Frequency (Weak Breath) Hz:</label>
+                            <input type="number" id="freq-low" value="220" min="50" max="1000" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label for="freq-high" data-i18n="freq_high_breath">Frequency (Strong Breath) Hz:</label>
+                            <input type="number" id="freq-high" value="225" min="50" max="1000" step="0.1">
+                        </div>
+                        <div id="length-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <strong data-i18n="effective_length_low">Effective Length (Low):</strong> <span id="l-eff-low">0</span> mm<br>
+                            <strong data-i18n="effective_length_high">Effective Length (High):</strong> <span id="l-eff-high">0</span> mm
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(1)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateLengths()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(3)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Node Shift -->
+                <div class="step-section" id="step-3" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-3')">
+                        <h3 data-i18n="step_3_title">Step 3: Node Shift Calculation</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_3_desc">Calculate the acoustic node displacement.</p>
+                        <div class="input-group">
+                            <label for="breath-mode" data-i18n="breath_mode">Breath Mode:</label>
+                            <select id="breath-mode">
+                                <option value="low" data-i18n="breath_low">Low Pressure</option>
+                                <option value="medium" selected data-i18n="breath_medium">Medium (Average)</option>
+                                <option value="high" data-i18n="breath_high">High Pressure</option>
+                            </select>
+                        </div>
+                        <div id="shift-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <strong data-i18n="node_shift">Node Shift (Δ):</strong> <span id="delta-value">0</span> mm
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(2)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateNodeShift()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(4)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Note Configuration -->
+                <div class="step-section" id="step-4" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-4')">
+                        <h3 data-i18n="step_4_title">Step 4: Note Configuration</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_4_desc">Configure notes and reference frequency.</p>
+                        <div class="input-group">
+                            <label for="reference-freq" data-i18n="reference_freq">Reference Frequency A4 (Hz):</label>
+                            <input type="number" id="reference-freq" value="440" min="415" max="466" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="notes-list" data-i18n="notes_to_drill">Notes to Drill:</label>
+                            <input type="text" id="notes-list" value="D4, E4, F#4, G4, A4, B4" placeholder="C4, D4, E4, F#4, G4, A4">
+                            <div class="input-hint" data-i18n="notes_hint">Enter notes separated by commas</div>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(3)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(5)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Raw Hole Positions -->
+                <div class="step-section" id="step-5" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-5')">
+                        <h3 data-i18n="step_5_title">Step 5: Raw Hole Positions</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_5_desc">Calculate theoretical hole positions.</p>
+                        <div id="raw-positions-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #ddd;">
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_note">Note</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_frequency">Freq (Hz)</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_position">Position (mm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="raw-positions-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(4)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateRawPositions()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(6)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Hole Diameter Corrections -->
+                <div class="step-section" id="step-6" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-6')">
+                        <h3 data-i18n="step_6_title">Step 6: Hole Diameter Corrections</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_6_desc">Apply corrections based on hole size and wall thickness.</p>
+                        <div class="input-group">
+                            <label for="hole-diameters" data-i18n="hole_diameters">Hole Diameters (mm):</label>
+                            <input type="text" id="hole-diameters" value="8, 8, 8, 8, 8, 8" placeholder="8, 8, 8, 8, 8, 8">
+                            <div class="input-hint" data-i18n="hole_diameters_hint">Comma-separated values</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="wall-thickness" data-i18n="wall_thickness">Wall Thickness (mm):</label>
+                            <input type="number" id="wall-thickness" value="3" min="1" max="10" step="0.5">
+                        </div>
+                        <div id="corrected-positions-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #ddd;">
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_note">Note</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_position">Corrected (mm)</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_correction">Correction (mm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corrected-positions-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(5)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateCorrectedPositions()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(7)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7: Ergonomic Check -->
+                <div class="step-section" id="step-7" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-7')">
+                        <h3 data-i18n="step_7_title">Step 7: Ergonomic Check</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_7_desc">Verify hole spacing is comfortable.</p>
+                        <div class="input-group">
+                            <label for="hand-size" data-i18n="hand_size">Hand Size:</label>
+                            <select id="hand-size">
+                                <option value="small" data-i18n="hand_small">Small</option>
+                                <option value="medium" selected data-i18n="hand_medium">Medium</option>
+                                <option value="large" data-i18n="hand_large">Large</option>
+                            </select>
+                        </div>
+                        <div id="ergonomic-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <strong data-i18n="ergonomic_warnings">Ergonomic Warnings:</strong>
+                            <div id="warnings-list"></div>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(6)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="calculateErgonomics()" data-i18n="calculate_step">Calculate</button>
+                            <button class="calculate-button" onclick="nextAcousticalStep(8)" data-i18n="next_step">Next Step →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 8: Drilling Plan -->
+                <div class="step-section" id="step-8" style="display: none;">
+                    <div class="step-header" onclick="toggleStep('step-8')">
+                        <h3 data-i18n="step_8_title">Step 8: Drilling Plan</h3>
+                        <span class="step-toggle">▶</span>
+                    </div>
+                    <div class="step-content" style="display: none;">
+                        <p class="step-description" data-i18n="step_8_desc">Generate complete drilling plan with tolerances.</p>
+                        <div id="drilling-plan-result" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 5px; display: none;">
+                            <h4 data-i18n="results_title">Drilling Plan Results</h4>
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                                <thead>
+                                    <tr style="background: #ddd;">
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_note">Note</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_position">Position (mm)</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_drill_start">Start Drill (mm)</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_drill_final">Final Drill (mm)</th>
+                                        <th style="padding: 5px; border: 1px solid #ccc;" data-i18n="table_target_freq">Target (Hz)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="drilling-plan-tbody"></tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="calculate-button" onclick="prevAcousticalStep(7)" data-i18n="previous_step">← Previous</button>
+                            <button class="calculate-button" onclick="generateDrillingPlan()" data-i18n="view_results">View Results</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
