@@ -744,3 +744,32 @@ footer {
     margin-top: 10px;
     color: #d9534f;
 }
+
+/* Result tables in step sections */
+.step-result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.step-result-table thead tr {
+    background: #ddd;
+}
+
+.step-result-table th,
+.step-result-table td {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.step-result-container {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    display: none;
+}
+
+.step-result-container.visible {
+    display: block;
+}

@@ -88,7 +88,7 @@ function calculateSpeed() {
     acousticState.speedOfSound = 331.4 + 0.6 * temp;
     
     document.getElementById('speed-value').textContent = acousticState.speedOfSound.toFixed(2);
-    document.getElementById('speed-result').style.display = 'block';
+    document.getElementById('speed-result').classList.add('visible');
 }
 
 // Step 2: Calculate Effective Lengths
@@ -109,7 +109,7 @@ function calculateLengths() {
     
     document.getElementById('l-eff-low').textContent = acousticState.L_eff_low.toFixed(2);
     document.getElementById('l-eff-high').textContent = acousticState.L_eff_high.toFixed(2);
-    document.getElementById('length-result').style.display = 'block';
+    document.getElementById('length-result').classList.add('visible');
 }
 
 // Step 3: Calculate Node Shift
@@ -129,7 +129,7 @@ function calculateNodeShift() {
     }
     
     document.getElementById('delta-value').textContent = acousticState.delta.toFixed(2);
-    document.getElementById('shift-result').style.display = 'block';
+    document.getElementById('shift-result').classList.add('visible');
 }
 
 // Helper: Convert note to frequency
@@ -183,14 +183,15 @@ function calculateRawPositions() {
     acousticState.rawPositions.forEach(pos => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.note}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.f.toFixed(2)}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.x0.toFixed(2)}</td>
+            <td>${pos.note}</td>
+            <td>${pos.f.toFixed(2)}</td>
+            <td>${pos.x0.toFixed(2)}</td>
         `;
         tbody.appendChild(row);
     });
     
-    document.getElementById('raw-positions-result').style.display = 'block';
+    const resultDiv = document.getElementById('raw-positions-result');
+    resultDiv.classList.add('visible');
 }
 
 // Step 6: Calculate Corrected Positions
@@ -228,14 +229,15 @@ function calculateCorrectedPositions() {
     acousticState.correctedPositions.forEach(pos => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.note}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.x.toFixed(2)}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${pos.correction.toFixed(2)}</td>
+            <td>${pos.note}</td>
+            <td>${pos.x.toFixed(2)}</td>
+            <td>${pos.correction.toFixed(2)}</td>
         `;
         tbody.appendChild(row);
     });
     
-    document.getElementById('corrected-positions-result').style.display = 'block';
+    const resultDiv = document.getElementById('corrected-positions-result');
+    resultDiv.classList.add('visible');
 }
 
 // Step 7: Ergonomic Check
@@ -271,7 +273,7 @@ function calculateErgonomics() {
             '</ul>';
     }
     
-    document.getElementById('ergonomic-result').style.display = 'block';
+    document.getElementById('ergonomic-result').classList.add('visible');
 }
 
 // Step 8: Generate Drilling Plan
@@ -282,14 +284,15 @@ function generateDrillingPlan() {
     acousticState.correctedPositions.forEach(hole => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td style="padding: 5px; border: 1px solid #ccc;">${hole.note}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${hole.x.toFixed(2)}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${(hole.d - 1).toFixed(2)}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${hole.d.toFixed(2)}</td>
-            <td style="padding: 5px; border: 1px solid #ccc;">${hole.f.toFixed(2)}</td>
+            <td>${hole.note}</td>
+            <td>${hole.x.toFixed(2)}</td>
+            <td>${(hole.d - 1).toFixed(2)}</td>
+            <td>${hole.d.toFixed(2)}</td>
+            <td>${hole.f.toFixed(2)}</td>
         `;
         tbody.appendChild(row);
     });
     
-    document.getElementById('drilling-plan-result').style.display = 'block';
+    const resultDiv = document.getElementById('drilling-plan-result');
+    resultDiv.classList.add('visible');
 }
