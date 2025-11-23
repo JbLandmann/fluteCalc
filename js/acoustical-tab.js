@@ -83,6 +83,11 @@ function prevAcousticalStep(stepNumber) {
     nextAcousticalStep(stepNumber);
 }
 
+// Explicitly expose functions to global scope to ensure they're available for inline onclick handlers
+window.toggleStep = toggleStep;
+window.nextAcousticalStep = nextAcousticalStep;
+window.prevAcousticalStep = prevAcousticalStep;
+
 // Step 1: Calculate Speed of Sound
 function calculateSpeed() {
     const temp = parseFloat(document.getElementById('temperature').value);
