@@ -330,6 +330,7 @@ header h1 {
 }
 
 /* Responsive grid for input fields on larger screens */
+/* Note: On mobile (<768px), input groups naturally stack vertically due to default block layout */
 @media (min-width: 768px) {
     .input-section {
         max-width: 800px;
