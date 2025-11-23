@@ -264,9 +264,9 @@ function calculateErgonomics() {
     // Display warnings
     const warningsList = document.getElementById('warnings-list');
     if (acousticState.warnings.length === 0) {
-        warningsList.innerHTML = '<p style="color: green; margin-top: 10px;">✓ All holes are adequately spaced</p>';
+        warningsList.innerHTML = '<p class="ergonomic-success">✓ All holes are adequately spaced</p>';
     } else {
-        warningsList.innerHTML = '<ul style="margin-top: 10px; color: #d9534f;">' +
+        warningsList.innerHTML = '<ul class="ergonomic-warnings-list">' +
             acousticState.warnings.map(w => `<li>${w}</li>`).join('') +
             '</ul>';
     }

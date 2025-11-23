@@ -734,3 +734,13 @@ footer {
     margin-top: 5px;
     font-style: italic;
 }
+
+.ergonomic-success {
+    color: green;
+    margin-top: 10px;
+}
+
+.ergonomic-warnings-list {
+    margin-top: 10px;
+    color: #d9534f;
+}
