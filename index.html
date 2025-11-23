@@ -25,54 +25,54 @@
         <div id="simple" class="tab-content active">
             <div class="algorithm-explanation">
                 <div class="algorithm-explanation-header" onclick="toggleAlgorithm('simple-algo')">
-                    <h2>Xiao Flute - Sanfen Sunyi Method (三分损益法)</h2>
+                    <h2 data-i18n="algo_xiao_title">Xiao Flute - Sanfen Sunyi Method (三分损益法)</h2>
                     <span class="algorithm-explanation-toggle" id="simple-algo-toggle">▼</span>
                 </div>
                 <div class="algorithm-explanation-content" id="simple-algo-content">
                     <div class="algorithm-inputs" id="simple-algo-inputs">
-                        <strong>Current Inputs:</strong><br>
-                        Base Frequency: <span id="simple-input-frequency">440</span> Hz<br>
-                        Inner Diameter: <span id="simple-input-diameter">19</span> mm<br>
-                        Temperature: <span id="simple-input-temp">20</span> °C<br>
-                        Number of Holes: <span id="simple-input-holes">6</span>
+                        <strong data-i18n="algo_current_inputs">Current Inputs:</strong><br>
+                        <span data-i18n="algo_base_frequency">Base Frequency:</span> <span id="simple-input-frequency">440</span> Hz<br>
+                        <span data-i18n="algo_inner_diameter">Inner Diameter:</span> <span id="simple-input-diameter">19</span> mm<br>
+                        <span data-i18n="algo_temperature">Temperature:</span> <span id="simple-input-temp">20</span> °C<br>
+                        <span data-i18n="algo_number_of_holes">Number of Holes:</span> <span id="simple-input-holes">6</span>
                     </div>
-                    <p>The Sanfen Sunyi (三分损益法) is an ancient Chinese mathematical method for calculating musical intervals, perfect for crafting Xiao flutes. This method creates beautiful pentatonic scales by alternating between adding and subtracting thirds.</p>
+                    <p data-i18n="algo_xiao_intro">The Sanfen Sunyi (三分损益法) is an ancient Chinese mathematical method for calculating musical intervals, perfect for crafting Xiao flutes. This method creates beautiful pentatonic scales by alternating between adding and subtracting thirds.</p>
                     
-                    <h3>How it Works:</h3>
+                    <h3 data-i18n="algo_xiao_how_title">How it Works:</h3>
                     <ul>
-                        <li>Start with the base frequency of your bamboo (the fundamental note)</li>
-                        <li><strong>San Fen Sun Yi (三分损一):</strong> "Divide into three parts, lose one" - multiply frequency by 3/2 (perfect fifth up)</li>
-                        <li><strong>San Fen Yi Yi (三分益一):</strong> "Divide into three parts, gain one" - multiply frequency by 4/3 (perfect fourth up)</li>
-                        <li>For each hole, you can choose the next interval to create your desired scale</li>
-                        <li>Includes acoustic correction based on bore diameter and temperature</li>
+                        <li data-i18n="algo_xiao_how_1">Start with the base frequency of your bamboo (the fundamental note)</li>
+                        <li data-i18n-html="algo_xiao_how_2"><strong>San Fen Sun Yi (三分损一):</strong> "Divide into three parts, lose one" - multiply frequency by 3/2 (perfect fifth up)</li>
+                        <li data-i18n-html="algo_xiao_how_3"><strong>San Fen Yi Yi (三分益一):</strong> "Divide into three parts, gain one" - multiply frequency by 4/3 (perfect fourth up)</li>
+                        <li data-i18n="algo_xiao_how_4">For each hole, you can choose the next interval to create your desired scale</li>
+                        <li data-i18n="algo_xiao_how_5">Includes acoustic correction based on bore diameter and temperature</li>
                     </ul>
 
-                    <h3>Calculation Details:</h3>
-                    <p>The effective length for each note is calculated as:</p>
+                    <h3 data-i18n="algo_calc_details_title">Calculation Details:</h3>
+                    <p data-i18n="algo_calc_details_intro">The effective length for each note is calculated as:</p>
                     <ul>
-                        <li><strong>Speed of sound:</strong> v = 331.3 + 0.606 × T (m/s) where T is temperature in °C</li>
-                        <li><strong>Effective length:</strong> L_eff = v / (2 × f)</li>
-                        <li><strong>End correction:</strong> δ = 0.6 × diameter (acoustic correction)</li>
-                        <li><strong>Hole position:</strong> Position = L_eff - δ (from blowing edge)</li>
+                        <li data-i18n-html="algo_xiao_calc_1"><strong>Speed of sound:</strong> v = 331.3 + 0.606 × T (m/s) where T is temperature in °C</li>
+                        <li data-i18n-html="algo_xiao_calc_2"><strong>Effective length:</strong> L_eff = v / (2 × f)</li>
+                        <li data-i18n-html="algo_xiao_calc_3"><strong>End correction:</strong> δ = 0.6 × diameter (acoustic correction)</li>
+                        <li data-i18n-html="algo_xiao_calc_4"><strong>Hole position:</strong> Position = L_eff - δ (from blowing edge)</li>
                     </ul>
 
-                    <h3>Traditional Intervals:</h3>
+                    <h3 data-i18n="algo_xiao_intervals_title">Traditional Intervals:</h3>
                     <ul>
-                        <li><strong>Perfect Fifth (3/2):</strong> Up 7 semitones, ratio 1.5</li>
-                        <li><strong>Perfect Fourth (4/3):</strong> Up 5 semitones, ratio 1.333</li>
-                        <li><strong>Major Third (5/4):</strong> Up 4 semitones, ratio 1.25</li>
-                        <li><strong>Minor Third (6/5):</strong> Up 3 semitones, ratio 1.2</li>
-                        <li><strong>Major Second (9/8):</strong> Up 2 semitones, ratio 1.125</li>
+                        <li data-i18n-html="algo_xiao_interval_1"><strong>Perfect Fifth (3/2):</strong> Up 7 semitones, ratio 1.5</li>
+                        <li data-i18n-html="algo_xiao_interval_2"><strong>Perfect Fourth (4/3):</strong> Up 5 semitones, ratio 1.333</li>
+                        <li data-i18n-html="algo_xiao_interval_3"><strong>Major Third (5/4):</strong> Up 4 semitones, ratio 1.25</li>
+                        <li data-i18n-html="algo_xiao_interval_4"><strong>Minor Third (6/5):</strong> Up 3 semitones, ratio 1.2</li>
+                        <li data-i18n-html="algo_xiao_interval_5"><strong>Major Second (9/8):</strong> Up 2 semitones, ratio 1.125</li>
                     </ul>
 
                     <div style="background: #fff3cd; border: 3px solid #856404; border-radius: 8px; padding: 20px; margin-top: 20px;">
-                        <h3 style="color: #856404; margin-bottom: 15px;">⚠️ Empirical Approach for Flute Crafters</h3>
-                        <p style="color: #856404;"><strong>Important:</strong> This calculator provides theoretical positions, but flute making requires an empirical approach:</p>
+                        <h3 style="color: #856404; margin-bottom: 15px;" data-i18n="algo_empirical_title">⚠️ Empirical Approach for Flute Crafters</h3>
+                        <p style="color: #856404;" data-i18n-html="algo_empirical_intro"><strong>Important:</strong> This calculator provides theoretical positions, but flute making requires an empirical approach:</p>
                         <ul style="color: #856404;">
-                            <li><strong>Start small:</strong> Begin by drilling holes smaller than calculated</li>
-                            <li><strong>Test and adjust:</strong> Gradually enlarge each hole while testing the pitch</li>
-                            <li><strong>Work systematically:</strong> Start from the lowest pitch (furthest hole) and move toward the highest (closest to blowing edge)</li>
-                            <li><strong>Fine-tune:</strong> Small adjustments in hole size significantly affect pitch</li>
+                            <li data-i18n-html="algo_empirical_1"><strong>Start small:</strong> Begin by drilling holes smaller than calculated</li>
+                            <li data-i18n-html="algo_empirical_2"><strong>Test and adjust:</strong> Gradually enlarge each hole while testing the pitch</li>
+                            <li data-i18n-html="algo_empirical_3"><strong>Work systematically:</strong> Start from the lowest pitch (furthest hole) and move toward the highest (closest to blowing edge)</li>
+                            <li data-i18n-html="algo_empirical_4"><strong>Fine-tune:</strong> Small adjustments in hole size significantly affect pitch</li>
                         </ul>
                     </div>
                 </div>
@@ -154,34 +154,34 @@
         <div id="acoustical" class="tab-content">
             <div class="algorithm-explanation">
                 <div class="algorithm-explanation-header" onclick="toggleAlgorithm('acoustical-algo')">
-                    <h2>Acoustical Physics Method</h2>
+                    <h2 data-i18n="algo_acoustical_title">Acoustical Physics Method</h2>
                     <span class="algorithm-explanation-toggle" id="acoustical-algo-toggle">▼</span>
                 </div>
                 <div class="algorithm-explanation-content" id="acoustical-algo-content">
                     <div class="algorithm-inputs" id="acoustical-algo-inputs">
-                        <strong>Current Inputs:</strong><br>
-                        Base Frequency: <span id="acoustical-input-frequency">293.66</span> Hz<br>
-                        Inner Diameter: <span id="acoustical-input-diameter">19</span> mm<br>
-                        Temperature: <span id="acoustical-input-temp">20</span> °C<br>
-                        Number of Holes: <span id="acoustical-input-holes">6</span>
+                        <strong data-i18n="algo_current_inputs">Current Inputs:</strong><br>
+                        <span data-i18n="algo_base_frequency">Base Frequency:</span> <span id="acoustical-input-frequency">293.66</span> Hz<br>
+                        <span data-i18n="algo_inner_diameter">Inner Diameter:</span> <span id="acoustical-input-diameter">19</span> mm<br>
+                        <span data-i18n="algo_temperature">Temperature:</span> <span id="acoustical-input-temp">20</span> °C<br>
+                        <span data-i18n="algo_number_of_holes">Number of Holes:</span> <span id="acoustical-input-holes">6</span>
                     </div>
-                    <p>This method uses fundamental acoustic principles to calculate hole positions based on the speed of sound, desired frequencies, and the physical properties of the flute.</p>
+                    <p data-i18n="algo_acoustical_intro">This method uses fundamental acoustic principles to calculate hole positions based on the speed of sound, desired frequencies, and the physical properties of the flute.</p>
                     
-                    <h3>How it Works:</h3>
+                    <h3 data-i18n="algo_xiao_how_title">How it Works:</h3>
                     <ul>
-                        <li>Uses the relationship: <span class="formula">f = v / (2 × L)</span> where f is frequency, v is speed of sound, L is effective length</li>
-                        <li>Accounts for end corrections based on bore diameter</li>
-                        <li>Considers temperature and humidity effects on sound velocity</li>
-                        <li>More accurate for precise tuning requirements</li>
+                        <li data-i18n-html="algo_acoustical_how_1">Uses the relationship: <span class="formula">f = v / (2 × L)</span> where f is frequency, v is speed of sound, L is effective length</li>
+                        <li data-i18n="algo_acoustical_how_2">Accounts for end corrections based on bore diameter</li>
+                        <li data-i18n="algo_acoustical_how_3">Considers temperature and humidity effects on sound velocity</li>
+                        <li data-i18n="algo_acoustical_how_4">More accurate for precise tuning requirements</li>
                     </ul>
 
-                    <h3>Calculation Details:</h3>
-                    <p>The effective length for each note is calculated as:</p>
+                    <h3 data-i18n="algo_calc_details_title">Calculation Details:</h3>
+                    <p data-i18n="algo_calc_details_intro">The effective length for each note is calculated as:</p>
                     <ul>
-                        <li><strong>Speed of sound:</strong> v ≈ 343 m/s (at 20°C)</li>
-                        <li><strong>End correction:</strong> δ ≈ 0.6 × diameter</li>
-                        <li><strong>Effective length:</strong> L_eff = v / (2 × f) - δ</li>
-                        <li><strong>Hole position:</strong> Distance from embouchure hole</li>
+                        <li data-i18n-html="algo_acoustical_calc_1"><strong>Speed of sound:</strong> v ≈ 343 m/s (at 20°C)</li>
+                        <li data-i18n-html="algo_acoustical_calc_2"><strong>End correction:</strong> δ ≈ 0.6 × diameter</li>
+                        <li data-i18n-html="algo_acoustical_calc_3"><strong>Effective length:</strong> L_eff = v / (2 × f) - δ</li>
+                        <li data-i18n-html="algo_acoustical_calc_4"><strong>Hole position:</strong> Distance from embouchure hole</li>
                     </ul>
                 </div>
             </div>
@@ -238,35 +238,35 @@
         <div id="benade" class="tab-content">
             <div class="algorithm-explanation">
                 <div class="algorithm-explanation-header" onclick="toggleAlgorithm('benade-algo')">
-                    <h2>Benade's Formula</h2>
+                    <h2 data-i18n="algo_benade_title">Benade's Formula</h2>
                     <span class="algorithm-explanation-toggle" id="benade-algo-toggle">▼</span>
                 </div>
                 <div class="algorithm-explanation-content" id="benade-algo-content">
                     <div class="algorithm-inputs" id="benade-algo-inputs">
-                        <strong>Current Inputs:</strong><br>
-                        Fundamental Length: <span id="benade-input-length">400</span> mm<br>
-                        Bore Diameter: <span id="benade-input-bore">19</span> mm<br>
-                        Hole Diameter: <span id="benade-input-hole-dia">8</span> mm<br>
-                        Wall Thickness: <span id="benade-input-wall">3</span> mm<br>
-                        Number of Holes: <span id="benade-input-holes">6</span>
+                        <strong data-i18n="algo_current_inputs">Current Inputs:</strong><br>
+                        <span data-i18n="algo_fundamental_length">Fundamental Length:</span> <span id="benade-input-length">400</span> mm<br>
+                        <span data-i18n="algo_bore_diameter">Bore Diameter:</span> <span id="benade-input-bore">19</span> mm<br>
+                        <span data-i18n="algo_hole_diameter">Hole Diameter:</span> <span id="benade-input-hole-dia">8</span> mm<br>
+                        <span data-i18n="algo_wall_thickness">Wall Thickness:</span> <span id="benade-input-wall">3</span> mm<br>
+                        <span data-i18n="algo_number_of_holes">Number of Holes:</span> <span id="benade-input-holes">6</span>
                     </div>
-                    <p>Developed by physicist Arthur Benade, this advanced method provides highly accurate hole positions by considering the acoustic impedance and coupling between holes.</p>
+                    <p data-i18n="algo_benade_intro">Developed by physicist Arthur Benade, this advanced method provides highly accurate hole positions by considering the acoustic impedance and coupling between holes.</p>
                     
-                    <h3>How it Works:</h3>
+                    <h3 data-i18n="algo_xiao_how_title">How it Works:</h3>
                     <ul>
-                        <li>Accounts for hole diameter relative to bore diameter</li>
-                        <li>Considers the acoustic mass and compliance of the air column</li>
-                        <li>Uses the chimney height (wall thickness) in calculations</li>
-                        <li>Most accurate method for professional instrument making</li>
+                        <li data-i18n="algo_benade_how_1">Accounts for hole diameter relative to bore diameter</li>
+                        <li data-i18n="algo_benade_how_2">Considers the acoustic mass and compliance of the air column</li>
+                        <li data-i18n="algo_benade_how_3">Uses the chimney height (wall thickness) in calculations</li>
+                        <li data-i18n="algo_benade_how_4">Most accurate method for professional instrument making</li>
                     </ul>
 
-                    <h3>Calculation Details:</h3>
-                    <p>The position calculation involves:</p>
+                    <h3 data-i18n="algo_calc_details_title">Calculation Details:</h3>
+                    <p data-i18n="algo_benade_calc_intro">The position calculation involves:</p>
                     <ul>
-                        <li><strong>Cutoff frequency:</strong> f_c = v / (2 × L)</li>
-                        <li><strong>Hole impedance:</strong> Z = f(d, D, t) where d=hole diameter, D=bore diameter, t=wall thickness</li>
-                        <li><strong>Position correction:</strong> Adjusted based on hole coupling effects</li>
-                        <li><strong>Formula:</strong> <span class="formula">L_n = (v / 2f_n) × [1 + K(d/D)²]</span></li>
+                        <li data-i18n-html="algo_benade_calc_1"><strong>Cutoff frequency:</strong> f_c = v / (2 × L)</li>
+                        <li data-i18n-html="algo_benade_calc_2"><strong>Hole impedance:</strong> Z = f(d, D, t) where d=hole diameter, D=bore diameter, t=wall thickness</li>
+                        <li data-i18n-html="algo_benade_calc_3"><strong>Position correction:</strong> Adjusted based on hole coupling effects</li>
+                        <li data-i18n-html="algo_benade_calc_4"><strong>Formula:</strong> <span class="formula">L_n = (v / 2f_n) × [1 + K(d/D)²]</span></li>
                     </ul>
                 </div>
             </div>
@@ -333,7 +333,6 @@
     <div id="visualization-modal" class="modal-backdrop" onclick="closeVisualizationIfBackdrop(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeVisualization()">×</button>
-            <h2 style="color: #6d5738; margin-bottom: 20px; text-align: center;" data-i18n="visualization_title">Visualisation de la Flûte</h2>
             <div id="flute-drawing-container">
                 <!-- SVG will be inserted here -->
             </div>
