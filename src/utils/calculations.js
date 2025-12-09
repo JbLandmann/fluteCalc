@@ -32,7 +32,7 @@ export function calculateEndCorrection(diameter) {
 }
 
 // Calculate effective length for a frequency
-export function calculateEffectiveLength(frequency, speedOfSound, endCorrection) {
+export function XcalculateEffectiveLength(frequency, speedOfSound, endCorrection) {
   return (speedOfSound / (2 * frequency)) - endCorrection;
 }
 
@@ -78,7 +78,7 @@ export function calculateHolePositions(model, baseFreq, diameter, temp) {
     const frequency = calculateFrequencyFromSemitone(baseFreq, semitone);
     frequencies.push(frequency);
     
-    const effectiveLength = calculateEffectiveLength(frequency, speedOfSound, endCorrection);
+    const effectiveLength = XcalculateEffectiveLength(frequency, speedOfSound, endCorrection);
     positions.push(effectiveLength);
   }
   
@@ -96,7 +96,7 @@ export function calculateAcousticalPositions(baseFreq, diameter, temp, numHoles)
   for (let i = 0; i < numHoles; i++) {
     const semitone = semitones[i];
     const frequency = calculateFrequencyFromSemitone(baseFreq, semitone);
-    const effectiveLength = calculateEffectiveLength(frequency, speedOfSound, endCorrection);
+    const effectiveLength = XcalculateEffectiveLength(frequency, speedOfSound, endCorrection);
     const note = getNoteFromSemitones(2, semitone);
     
     results.push({
@@ -137,3 +137,74 @@ export function calculateBenadePositions(length, boreDiameter, holeDiameter, wal
   
   return results;
 }
+
+// ===== REVERSE ENGINEERING METHOD (Acoustical Page) =====
+
+// Calculate effective length from measured frequency
+// calculationMethod: 'half-wave' or 'quarter-wave'
+export function calculateEffectiveLength(frequency, temperature, calculationMethod) {
+  // TODO: Implement actual calculation
+  // For now, return a constant
+  const speedOfSound = calculateSpeedOfSound(temperature);
+  
+  if (calculationMethod === 'half-wave') {
+    // L_eff = c / (2 * f0)
+    return speedOfSound / (2 * frequency);
+  } else {
+    // quarter-wave: L_eff = c / (4 * f0)
+    return speedOfSound / (4 * frequency);
+  }
+}
+
+// Calculate Delta (end correction) from two notes (normal and strong breath)
+export function calculateDeltaFromTwoNotes(note1Freq, note2Freq, temperature, calculationMethod) {
+  // TODO: Implement actual calculation based on two measured frequencies
+  // For now, return a constant
+  return 10.0; // mm
+}
+
+// Calculate hole position for a target note
+export function calculateHolePosition(
+  targetFrequency,
+  holeDiameter,
+  innerDiameter,
+  temperature,
+  calculationMethod,
+  delta,
+  effectiveLength
+) {
+  // TODO: Implement actual calculation
+  // For now, return a simple constant based on frequency ratio
+  const speedOfSound = calculateSpeedOfSound(temperature);
+  const baseLength = calculationMethod === 'half-wave' 
+    ? speedOfSound / (2 * targetFrequency)
+    : speedOfSound / (4 * targetFrequency);
+  
+  return baseLength - delta;
+}
+
+// Recalculate all positions after a measurement
+export function recalculatePositionsAfterMeasurement(
+  measurementIndex,
+  targetNotes,
+  newDelta,
+  effectiveLength,
+  innerDiameter,
+  temperature,
+  calculationMethod
+) {
+  // TODO: Implement actual recalculation logic with new Delta
+  // For now, just log the operation
+  console.log('Recalculating positions after measurement at index:', measurementIndex);
+  console.log('New Delta:', newDelta);
+  return targetNotes;
+}
+
+// Shift following note positions based on previous holes
+export function shiftFollowingNotes(basePosition, noteIndex, allNotes) {
+  // TODO: Implement actual shift calculation based on hole interactions
+  // For now, return the base position with a small shift per previous hole
+  const shift = noteIndex * 2; // 2mm shift per previous hole (placeholder)
+  return basePosition + shift;
+}
+
