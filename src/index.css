@@ -13,12 +13,23 @@
   box-sizing: border-box;
 }
 
+/* Remove arrows from number inputs */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 body {
   font-family: 'Georgia', 'Palatino', serif;
   background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
   color: var(--ink);
   min-height: 100vh;
-  padding: 20px;
+  padding: 0;
 }
 
 .container {
@@ -137,7 +148,7 @@ header h1 {
 
 /* Tab Content */
 .tab-content {
-  padding: 30px;
+  padding: 5px;
   animation: fadeIn 0.5s ease;
 }
 
@@ -604,5 +615,30 @@ footer {
     top: 0;
     right: 0;
     justify-content: center;
+  }
+
+  .input-section {
+    padding: 5px;
+  }
+
+  .input-group select {
+    font-size: 0.85em;
+    padding: 10px 12px;
+    white-space: normal;
+    height: auto;
+  }
+
+  .input-group select option {
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 8px;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+
+  .input-group input {
+    width: 100%;
   }
 }

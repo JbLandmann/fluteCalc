@@ -1,7 +1,12 @@
 // Acoustic calculation utilities
 
-// Note names for reference
+// Note names for reference with semitones
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+// Chromatic scale (index = semitones from C)
+export const chromaticScale = [
+  'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
+];
 
 // Get note name from frequency
 export function getNoteName(frequency) {
@@ -13,6 +18,54 @@ export function getNoteName(frequency) {
   const octave = Math.floor(Math.round(halfSteps) / 12);
   
   return `${noteNames[noteIndex < 0 ? noteIndex + 12 : noteIndex]}${octave}`;
+}
+
+// Get the closest note (without octave) from a frequency
+// Returns { name: 'D', index: 2 }
+export function getClosestNote(frequency) {
+  const A4 = 440;
+  const C0 = A4 * Math.pow(2, -4.75);
+  
+  const halfSteps = 12 * Math.log2(frequency / C0);
+  const noteIndex = Math.round(halfSteps) % 12;
+  const adjustedIndex = noteIndex < 0 ? noteIndex + 12 : noteIndex;
+  
+  return {
+    name: chromaticScale[adjustedIndex],
+    index: adjustedIndex
+  };
+}
+
+// Calculate frequency for a note at given semitone offset from base frequency
+export function calculateFrequencyFromNote(baseFrequency, semitoneOffset) {
+  return baseFrequency * Math.pow(2, semitoneOffset / 12);
+}
+
+// Generate array of target notes starting from base frequency
+// Each note is +1 semitone from the previous (chromatic scale)
+export function generateTargetNotes(baseFrequency, numberOfNotes = 5) {
+  const baseNote = getClosestNote(baseFrequency);
+  const targetNotes = [];
+  
+  for (let i = 1; i <= numberOfNotes; i++) {
+    // Get next note in chromatic scale (+i semitones from base)
+    const nextNoteIndex = (baseNote.index + i) % 12;
+    const nextNoteName = chromaticScale[nextNoteIndex];
+    
+    // Calculate frequency: +i semitones from base frequency
+    const frequency = calculateFrequencyFromNote(baseFrequency, i);
+    
+    targetNotes.push({
+      id: i,
+      frequency: parseFloat(frequency.toFixed(2)),
+      holeDiameter: 5,
+      position: null,
+      isMeasured: false,
+      noteName: nextNoteName
+    });
+  }
+  
+  return targetNotes;
 }
 
 // Get note from semitones offset
