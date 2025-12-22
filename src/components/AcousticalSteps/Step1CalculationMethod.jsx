@@ -5,17 +5,9 @@ import InputGroup from '../InputGroup/InputGroup'
 function Step1CalculationMethod({ calculationMethod, onMethodChange }) {
   const { t } = useTranslation()
 
-  const recap = calculationMethod === 'half-wave' ? (
-    <>
-      {t('step1_half_wave_hint')}<br />
-      {t('step1_half_wave_delta')}
-    </>
-  ) : (
-    <>
-      {t('step1_quarter_wave_hint')}<br />
-      {t('step1_quarter_wave_delta')}
-    </>
-  )
+  const recap = calculationMethod === 'half-wave' 
+    ? t('step1_half_wave_hint')
+    : t('step1_quarter_wave_hint')
 
   return (
     <div className="input-section">

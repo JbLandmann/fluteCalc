@@ -37,7 +37,7 @@ function Layout() {
       </main>
 
       <footer>
-        <p>{t('footer')}</p>
+        <p>© 2025 JBLandmann - MIT License</p>
       </footer>
     </div>
   )

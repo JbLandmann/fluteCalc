@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
+
 :root {
   --ease-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --wood-dark: #5d4a37;
@@ -38,7 +40,7 @@ input[type="number"] {
 
 body {
   font-family: 'Georgia', 'Palatino', serif;
-  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+  background: linear-gradient(135deg, #e8d5c4 0%, #78966b 100%);
   color: var(--ink);
   min-height: 100vh;
   padding: 0;
@@ -54,14 +56,9 @@ body {
 
 /* Header */
 header {
-  background-image: url('./assets/texture.png');
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
-  color: #fff;
-  padding: 60px 35px;
-  /* border-bottom: 3px solid var(--wood-dark); */
-  box-shadow: inset 0 -2px 8px rgba(0, 0, 0, 0.2), inset 0 0 0 2000px rgba(93, 74, 55, 0.7);
+  color: #ffffff;
+  background-color: #517742;
+  padding: 10px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,8 +67,11 @@ header {
   position: relative;
 }
 
+
+
 header h1 {
-  font-size: 2.5em;
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 3em;
   line-height: 1.2;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   margin: 0;
@@ -189,8 +189,8 @@ header h1 {
 /* Algorithm Explanation */
 .algorithm-explanation {
   background:
-    linear-gradient(0deg, rgba(139, 111, 71, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 111, 71, 0.03) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(139, 111, 71, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 111, 71, 0.08) 1px, transparent 1px),
     linear-gradient(135deg, #fdfbf7 0%, #f8f3e8 100%);
   background-size: 100% 24px, 24px 100%, 100% 100%;
   border: 2px solid #d4b896;
@@ -274,7 +274,6 @@ header h1 {
 
 .algorithm-explanation h2 {
   color: var(--wood-dark);
-  margin-bottom: 16px;
   font-size: 1.6em;
   font-weight: 600;
   letter-spacing: 0.5px;

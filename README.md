@@ -1,16 +1,34 @@
-# React + Vite
+# FluteCraft
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application for calculating precise hole positions when crafting traditional wind instruments, specifically focused on wood flutes. The tool bridges ancient musical traditions with modern acoustic physics, helping makers achieve accurate tuning without expensive measurement equipment.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Three Calculation Methods**:
+  - Xiao - Sanfen Sunyi Method (Ancient Chinese mathematical system)
+  - Acoustical Physics Method (Reverse engineering with measurement feedback)
+  - Benade's Formula (Woodwind research)
 
-## React Compiler
+- **Bilingual Support**: French and English
+- **Real-time Calculations**: Instant feedback as you adjust parameters
+- **Visual Diagrams**: SVG flute visualization with hole positions
+- **Measurement Workflow**: Iterative refinement with actual measurements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technology Stack
 
-## Expanding the ESLint configuration
+- React 19.2.0
+- Vite 7.2.4
+- React Router 7.1.1
+- i18next for internationalization
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Documentation
+
+- [Product Documentation](docs/PRODUCT.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Contributing Guidelines](docs/CONTRIBUTING.md)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+Copyright (c) 2026 Jean-Baptiste Landmann

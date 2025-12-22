@@ -1,5 +1,71 @@
 import { useTranslation } from 'react-i18next'
+import { useState, useEffect } from 'react'
 import InputGroup from '../InputGroup/InputGroup'
+import { sanitizeNumericInput, parseNumericInput } from '../../utils/inputHelpers'
+
+// Composant icône info (juste le bouton)
+function InfoIcon({ onToggle }) {
+  return (
+    <div 
+      style={{
+        position: 'absolute',
+        right: '0',
+        top: '0',
+        cursor: 'pointer',
+        width: '20px',
+        height: '20px',
+        borderRadius: '50%',
+        border: '2px solid #6d5738',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        color: '#6d5738',
+        background: '#fff',
+        zIndex: 10
+      }}
+      onClick={onToggle}
+    >
+      i
+    </div>
+  )
+}
+
+// Composant tooltip séparé
+function Tooltip({ imageKey, isVisible }) {
+  const { t } = useTranslation()
+  
+  if (!isVisible) return null
+  
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '110px',
+      left: '0',
+      right: '0',
+      height: '250px',
+      background: '#f5e6d3',
+      border: '2px solid #6d5738',
+      borderRadius: '8px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+      zIndex: 1000,
+      pointerEvents: 'none',
+      padding: '8px',
+      boxSizing: 'border-box'
+    }}>
+      <img
+        src={`${import.meta.env.BASE_URL}flute.svg`}
+        alt={t(`step2_${imageKey}_img_alt`)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'contain'
+        }}
+      />
+    </div>
+  )
+}
 
 function Step2PhysicalMeasurements({ 
   physicalLength, 
@@ -15,90 +81,166 @@ function Step2PhysicalMeasurements({
   effectiveLength,
   deltaAverage,
   baseNoteName,
-  measuredDelta,
-  measurementCount,
   validationError
 }) {
   const { t } = useTranslation()
+  const [activeTooltip, setActiveTooltip] = useState(null)
+
+  // Local display states for inputs (strings with comma)
+  const [displayLphys, setDisplayLphys] = useState(physicalLength.toString().replace('.', ','))
+  const [displayDinner, setDisplayDinner] = useState(innerDiameter.toString().replace('.', ','))
+  const [displayWall, setDisplayWall] = useState(wallThickness.toString().replace('.', ','))
+  const [displayTemp, setDisplayTemp] = useState(temperature.toString().replace('.', ','))
+  const [displayFreq, setDisplayFreq] = useState(note1Frequency.toString().replace('.', ','))
+
+  // Sync display with prop changes (when parent updates)
+  useEffect(() => {
+    setDisplayLphys(physicalLength.toString().replace('.', ','))
+  }, [physicalLength])
+  
+  useEffect(() => {
+    setDisplayDinner(innerDiameter.toString().replace('.', ','))
+  }, [innerDiameter])
+  
+  useEffect(() => {
+    setDisplayWall(wallThickness.toString().replace('.', ','))
+  }, [wallThickness])
+  
+  useEffect(() => {
+    setDisplayTemp(temperature.toString().replace('.', ','))
+  }, [temperature])
+  
+  useEffect(() => {
+    setDisplayFreq(note1Frequency.toString().replace('.', ','))
+  }, [note1Frequency])
+
+  const toggleTooltip = (key) => {
+    if (typeof key === 'boolean') {
+      // Hover: key = true/false
+      setActiveTooltip(key ? activeTooltip : null)
+    } else {
+      // Click: toggle
+      setActiveTooltip(prev => prev === key ? null : key)
+    }
+  }
+
+  // Arrondi à l'unité ou .5 le plus proche
+  const roundToHalf = (num) => {
+    return Math.round(num * 2) / 2
+  }
+
+  // Vérifier si la note est à +/- 10 cents de la fréquence en 440
+  const analyzeFrequencyAccuracy = (frequency) => {
+    const A4 = 440
+    const C0 = A4 * Math.pow(2, -4.75)
+    const actualSemitones = 12 * Math.log2(frequency / C0)
+    const targetSemitones = Math.round(actualSemitones)
+    const centsDiff = (actualSemitones - targetSemitones) * 100
+    return Math.abs(centsDiff) > 10
+  }
+
+  const displayBaseNote = (analyzeFrequencyAccuracy(note1Frequency) ? '~' : '') + baseNoteName
 
   return (
     <div className="input-section">
       <h3>{t('step2_title')}</h3>
       <div className="input-grid">
-        <InputGroup label={t('step2_lphys')} hint={t('step2_lphys_hint')} unit="mm">
-          <input
-            type="number"
-            value={physicalLength}
-            onChange={(e) => setPhysicalLength(parseFloat(e.target.value))}
-            min="100"
-            max="1000"
-            step="1"
-            style={{ paddingRight: '35px' }}
-          />
-        </InputGroup>
+        <div style={{ position: 'relative' }}>
+          <InputGroup label={t('step2_lphys')} hint={t('step2_lphys_hint')} unit="mm">
+            <input
+              type="text"
+              value={displayLphys}
+              onChange={(e) => {
+                const sanitized = sanitizeNumericInput(e.target.value)
+                setDisplayLphys(sanitized)
+                const parsed = parseNumericInput(sanitized)
+                if (!isNaN(parsed)) setPhysicalLength(parsed)
+              }}
+              style={{ paddingRight: '35px' }}
+            />
+          </InputGroup>
+          <InfoIcon onToggle={() => toggleTooltip('lphys')} />
+          <Tooltip imageKey="lphys" isVisible={activeTooltip === 'lphys'} />
+        </div>
         
-        <InputGroup label={t('step2_dinner')} hint={t('step2_dinner_hint')} unit="mm">
-          <input
-            type="number"
-            value={innerDiameter}
-            onChange={(e) => setInnerDiameter(parseFloat(e.target.value))}
-            min="10"
-            max="50"
-            step="0.5"
-            style={{ paddingRight: '35px' }}
-          />
-        </InputGroup>
+        <div style={{ position: 'relative' }}>
+          <InputGroup label={t('step2_dinner')} hint={t('step2_dinner_hint')} unit="mm">
+            <input
+              type="text"
+              value={displayDinner}
+              onChange={(e) => {
+                const sanitized = sanitizeNumericInput(e.target.value)
+                setDisplayDinner(sanitized)
+                const parsed = parseNumericInput(sanitized)
+                if (!isNaN(parsed)) setInnerDiameter(parsed)
+              }}
+              style={{ paddingRight: '35px' }}
+            />
+          </InputGroup>
+          <InfoIcon onToggle={() => toggleTooltip('dinner')} />
+          <Tooltip imageKey="dinner" isVisible={activeTooltip === 'dinner'} />
+        </div>
         
-        <InputGroup label={t('step2_wall_thickness')} hint={t('step2_wall_thickness_hint')} unit="mm">
-          <input
-            type="number"
-            value={wallThickness}
-            onChange={(e) => setWallThickness(parseFloat(e.target.value))}
-            min="1"
-            max="10"
-            step="0.5"
-            style={{ paddingRight: '35px' }}
-          />
-        </InputGroup>
+        <div style={{ position: 'relative' }}>
+          <InputGroup label={t('step2_wall_thickness')} hint={t('step2_wall_thickness_hint')} unit="mm">
+            <input
+              type="text"
+              value={displayWall}
+              onChange={(e) => {
+                const sanitized = sanitizeNumericInput(e.target.value)
+                setDisplayWall(sanitized)
+                const parsed = parseNumericInput(sanitized)
+                if (!isNaN(parsed)) setWallThickness(parsed)
+              }}
+              style={{ paddingRight: '35px' }}
+            />
+          </InputGroup>
+          <InfoIcon onToggle={() => toggleTooltip('wall')} />
+          <Tooltip imageKey="wall" isVisible={activeTooltip === 'wall'} />
+        </div>
         
-        <InputGroup label={t('temperature')} hint="Pour la vitesse du son (optionnel)" unit="°C">
-          <input
-            type="number"
-            value={temperature}
-            onChange={(e) => setTemperature(parseFloat(e.target.value))}
-            min="-10"
-            max="40"
-            step="1"
-            style={{ paddingRight: '35px' }}
-          />
-        </InputGroup>
+        <div>
+          <InputGroup label={t('temperature')} hint={t('temperature_hint')} unit="°C">
+            <input
+              type="text"
+              value={displayTemp}
+              onChange={(e) => {
+                const sanitized = sanitizeNumericInput(e.target.value)
+                setDisplayTemp(sanitized)
+                const parsed = parseNumericInput(sanitized)
+                if (!isNaN(parsed)) setTemperature(parsed)
+              }}
+              style={{ paddingRight: '35px' }}
+            />
+          </InputGroup>
+        </div>
 
-        <InputGroup label={t('step2_note1_freq')} hint={t('step2_note1_hint')} unit="Hz">
-          <input
-            type="number"
-            value={note1Frequency}
-            onChange={(e) => setNote1Frequency(parseFloat(e.target.value))}
-            min="100"
-            max="1000"
-            step="0.01"
-            style={{ paddingRight: '35px' }}
-          />
-        </InputGroup>
+        <div style={{ position: 'relative' }}>
+          <InputGroup label={t('step2_note1_freq')} hint={t('step2_note1_hint')} unit="Hz">
+            <input
+              type="text"
+              value={displayFreq}
+              onChange={(e) => {
+                const sanitized = sanitizeNumericInput(e.target.value)
+                setDisplayFreq(sanitized)
+                const parsed = parseNumericInput(sanitized)
+                if (!isNaN(parsed)) setNote1Frequency(parsed)
+              }}
+              style={{ paddingRight: '35px' }}
+            />
+          </InputGroup>
+          <InfoIcon onToggle={() => toggleTooltip('freq')} />
+          <Tooltip imageKey="freq" isVisible={activeTooltip === 'freq'} />
+        </div>
       </div>
 
       {effectiveLength > 0 && (
         <>
           <div style={{ marginTop: '20px', padding: '15px', background: '#e8dcc8', borderRadius: '8px' }}>
             <strong>{t('step2_calculated_values')}</strong><br />
-            {t('step2_leff')} {effectiveLength.toFixed(2)} mm<br />
-            {t('step2_delta')} {deltaAverage?.toFixed(2) || '—'} mm
-            {measuredDelta !== null && (
-              <span style={{ color: '#4caf50', fontWeight: 'bold', marginLeft: '10px' }}>
-                → {measuredDelta.toFixed(2)} mm ✓ (mesuré ×{measurementCount})
-              </span>
-            )}
-            <br />
-            <em>{t('step2_base_note')}</em> <strong>{baseNoteName}</strong>
+            {t('step2_leff')} {roundToHalf(effectiveLength)} mm<br />
+            {t('step2_delta')} {deltaAverage ? roundToHalf(deltaAverage) : '—'} mm<br />
+            <em>{t('step2_base_note')}</em> <strong>{displayBaseNote}</strong>
           </div>
           
           {validationError && (

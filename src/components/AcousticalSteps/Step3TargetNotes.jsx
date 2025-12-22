@@ -1,22 +1,73 @@
 import { useTranslation } from 'react-i18next'
+import { useState, useEffect } from 'react'
 import InputGroup from '../InputGroup/InputGroup'
 import { chromaticScale, calculateSemitoneInterval, analyzeFrequencyAccuracy } from '../../utils/calculations'
+import { sanitizeNumericInput, parseNumericInput } from '../../utils/inputHelpers'
+
+// Component for frequency input with local display state
+function FrequencyInput({ value, onChange }) {
+  const roundToHalf = (num) => Math.round(num * 2) / 2
+  const [displayValue, setDisplayValue] = useState(roundToHalf(value).toString().replace('.', ','))
+
+  useEffect(() => {
+    setDisplayValue(roundToHalf(value).toString().replace('.', ','))
+  }, [value])
+
+  return (
+    <input
+      type="text"
+      value={displayValue}
+      onChange={(e) => {
+        const sanitized = sanitizeNumericInput(e.target.value)
+        setDisplayValue(sanitized)
+        const parsed = parseNumericInput(sanitized)
+        if (!isNaN(parsed)) onChange(parsed)
+      }}
+      style={{ paddingRight: '35px' }}
+      onWheel={(e) => e.target.blur()}
+    />
+  )
+}
+
+// Component for diameter input with local display state
+function DiameterInput({ value, onChange }) {
+  const [displayValue, setDisplayValue] = useState(value.toString().replace('.', ','))
+
+  useEffect(() => {
+    setDisplayValue(value.toString().replace('.', ','))
+  }, [value])
+
+  return (
+    <input
+      type="text"
+      value={displayValue}
+      onChange={(e) => {
+        const sanitized = sanitizeNumericInput(e.target.value)
+        setDisplayValue(sanitized)
+        const parsed = parseNumericInput(sanitized)
+        if (!isNaN(parsed)) onChange(parsed)
+      }}
+      style={{ paddingRight: '35px' }}
+    />
+  )
+}
 
 function Step3TargetNotes({
   targetNotes,
-  minNotes,
   maxNotes,
-  physicalLength,
   baseFrequency,
   onUpdateNote,
   onMeasureNote,
-  onRemoveNote,
   onAddNote,
-  onChangeNoteSemitone,
   onResetNote,
   onAdjustInterval
 }) {
   const { t } = useTranslation()
+
+  // Arrondi à l'unité ou .5 le plus proche
+  const roundToHalf = (num) => {
+    return Math.round(num * 2) / 2
+  }
 
   return (
     <div className="input-section">
@@ -138,17 +189,9 @@ function Step3TargetNotes({
               {!note.isMeasured ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <InputGroup label={t('step3_target_frequency')} unit="Hz">
-                    <input
-                      type="number"
+                    <FrequencyInput
                       value={note.frequency}
-                      onChange={(e) => onUpdateNote(index, 'frequency', parseFloat(e.target.value))}
-                      min="100"
-                      max="2000"
-                      step="0.01"
-                      style={{
-                        paddingRight: '35px'
-                      }}
-                      onWheel={(e) => e.target.blur()}
+                      onChange={(val) => onUpdateNote(index, 'frequency', val)}
                     />
                   </InputGroup>
                 </div>
@@ -161,7 +204,7 @@ function Step3TargetNotes({
                     fontWeight: 'bold',
                     textAlign: 'center'
                   }}>
-                    {note.frequency.toFixed(2)}
+                    {roundToHalf(note.frequency)}
                   </div>
                 </div>
               )}
@@ -169,14 +212,9 @@ function Step3TargetNotes({
               {!note.isMeasured ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <InputGroup label={t('step3_hole_diameter')} unit="mm">
-                    <input
-                      type="number"
+                    <DiameterInput
                       value={note.holeDiameter}
-                      onChange={(e) => onUpdateNote(index, 'holeDiameter', parseFloat(e.target.value))}
-                      min="3"
-                      max="15"
-                      step="0.5"
-                      style={{ paddingRight: '35px' }}
+                      onChange={(val) => onUpdateNote(index, 'holeDiameter', val)}
                     />
                   </InputGroup>
                 </div>
@@ -240,7 +278,7 @@ function Step3TargetNotes({
                       </button>
                     )}
                     <span style={{ fontSize: '1em', color: '#3e2723', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
-                      +{interval.toFixed(2)} ({displayNote})
+                      +{interval.toFixed(2)} {t("step3_tone")} ({displayNote})
                     </span>
                     {!note.isMeasured && (
                       <button
@@ -283,7 +321,7 @@ function Step3TargetNotes({
               <div style={{ marginLeft: 'auto', paddingLeft: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '5px', fontSize: '0.95em', color: '#6d5738', fontWeight: 600, textAlign: 'center' }}>{t('step3_position_from_base')}</label>
                 <div style={{ padding: '12px 15px', fontWeight: 'bold', fontSize: '1em', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', background: '#fffcf7', borderRadius: '5px' }}>
-                  {note.position ? `${note.position.toFixed(2)} mm` : '—'}
+                  {note.position ? `${roundToHalf(note.position)} mm` : '—'}
                 </div>
               </div>
             </div>

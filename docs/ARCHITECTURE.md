@@ -110,7 +110,7 @@ Pure functions implementing acoustic physics:
 - `calculateDeltaFromMeasuredHole(...)`: Inverse solver - calculates delta from measured hole frequency + position + diameter
 - `calculateHolePosition(...)`: Hole placement from target frequency
 - `recalculatePositionsAfterMeasurement(...)`: Cascading corrections after real measurements
-- `calculateSemitoneInterval(freq1, freq2)`: Returns fractional semitones between frequencies using logarithmic formula
+- `calculateSemitoneInterval(freq1, freq2)`: Returns fractional tones between frequencies using logarithmic formula
 - `analyzeFrequencyAccuracy(frequency)`: Detects if frequency matches chromatic note within ±10 cents tolerance
 - `validateStep2Parameters(targetNotes, physicalLength)`: Validates first 5 notes have positions within physical bounds
 

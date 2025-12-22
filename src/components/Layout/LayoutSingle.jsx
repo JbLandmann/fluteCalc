@@ -17,7 +17,7 @@ function LayoutSingle() {
       </main>
 
       <footer>
-        <p>{t('footer')}</p>
+        <p>© 2025 jb landmann - MIT License</p>
       </footer>
     </div>
   )

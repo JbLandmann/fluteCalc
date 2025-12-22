@@ -1,18 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import InputGroup from '../InputGroup/InputGroup'
 import './MeasureModal.css'
+import { sanitizeNumericInput, parseNumericInput } from '../../utils/inputHelpers'
 
-function MeasureModal({ isOpen, onClose, onConfirm, initialFrequency, initialDiameter }) {
+function MeasureModal({ isOpen, onClose, onConfirm, initialFrequency, initialDiameter, targetFrequency, targetDiameter }) {
   const { t } = useTranslation()
-  const [frequency, setFrequency] = useState(initialFrequency || '')
-  const [diameter, setDiameter] = useState(initialDiameter || '')
+  const [frequency, setFrequency] = useState('')
+  const [diameter, setDiameter] = useState('')
+  const [displayFrequency, setDisplayFrequency] = useState('')
+  const [displayDiameter, setDisplayDiameter] = useState('')
+
+  // Update fields when modal opens with new values
+  useEffect(() => {
+    if (isOpen) {
+      const freq = targetFrequency || initialFrequency || ''
+      const diam = targetDiameter || initialDiameter || ''
+      setFrequency(freq)
+      setDiameter(diam)
+      setDisplayFrequency(freq.toString().replace('.', ','))
+      setDisplayDiameter(diam.toString().replace('.', ','))
+    }
+  }, [isOpen, targetFrequency, initialFrequency, targetDiameter, initialDiameter])
 
   if (!isOpen) return null
 
   const handleConfirm = () => {
-    if (frequency && diameter) {
-      onConfirm(parseFloat(frequency), parseFloat(diameter))
+    if (!isNaN(frequency) && !isNaN(diameter) && frequency && diameter) {
+      onConfirm(frequency, diameter)
       onClose()
     }
   }
@@ -30,12 +45,14 @@ function MeasureModal({ isOpen, onClose, onConfirm, initialFrequency, initialDia
         
         <InputGroup label={t('measure_modal_frequency')} unit="Hz">
           <input
-            type="number"
-            value={frequency}
-            onChange={(e) => setFrequency(e.target.value)}
-            min="100"
-            max="2000"
-            step="0.01"
+            type="text"
+            value={displayFrequency}
+            onChange={(e) => {
+              const sanitized = sanitizeNumericInput(e.target.value)
+              setDisplayFrequency(sanitized)
+              const parsed = parseNumericInput(sanitized)
+              if (!isNaN(parsed)) setFrequency(parsed)
+            }}
             placeholder="Enter frequency"
             autoFocus
             style={{ paddingRight: '35px' }}
@@ -44,12 +61,14 @@ function MeasureModal({ isOpen, onClose, onConfirm, initialFrequency, initialDia
 
         <InputGroup label={t('measure_modal_diameter')} unit="mm">
           <input
-            type="number"
-            value={diameter}
-            onChange={(e) => setDiameter(e.target.value)}
-            min="3"
-            max="15"
-            step="0.5"
+            type="text"
+            value={displayDiameter}
+            onChange={(e) => {
+              const sanitized = sanitizeNumericInput(e.target.value)
+              setDisplayDiameter(sanitized)
+              const parsed = parseNumericInput(sanitized)
+              if (!isNaN(parsed)) setDiameter(parsed)
+            }}
             placeholder="Enter diameter"
             style={{ paddingRight: '35px' }}
           />
