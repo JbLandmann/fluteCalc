@@ -237,13 +237,13 @@ function AcousticalPage() {
     <>
       <strong>{t('algo_current_inputs')}</strong><br />
       <br />
-      <em>Vitesse du son :</em><br />
+      <em>{t('algo_speed_of_sound')}</em><br />
       v = {(calculateSpeedOfSound(temperature) / 1000).toFixed(1)} m/s<br />
       <br />
-      <em>Correction de bout :</em><br />
+      <em>{t('algo_end_correction')}</em><br />
       Δ = {physicalLength.toFixed(2)} - L_eff = {deltaAverage.toFixed(2)} mm<br />
       <br />
-      <em>Longueur effective :</em><br />
+      <em>{t('algo_effective_length')}</em><br />
       L_eff = v / ({calculationMethod === 'half-wave' ? '2' : '4'} × {note1Frequency.toFixed(2)}) = {effectiveLength.toFixed(2)} mm
     </>
   ) : null
