@@ -38,29 +38,39 @@ function Tooltip({ imageKey, isVisible }) {
   
   if (!isVisible) return null
   
+  // Mapping des clés vers les noms de fichiers
+  const imageFiles = {
+    'lphys': 'guide_longueur.png',
+    'dinner': 'guide_diametre.png',
+    'wall': 'guide_paroi.png',
+    'freq': 'guide_frequence.png'
+  }
+  
   return (
     <div style={{
       position: 'absolute',
       top: '110px',
       left: '0',
       right: '0',
-      height: '250px',
+      height: '180px',
       background: '#f5e6d3',
-      border: '2px solid #6d5738',
+
       borderRadius: '8px',
       boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
       zIndex: 1000,
       pointerEvents: 'none',
-      padding: '8px',
-      boxSizing: 'border-box'
+      padding: '0',
+      boxSizing: 'border-box',
+      overflow: 'hidden'
     }}>
       <img
-        src={`${import.meta.env.BASE_URL}flute.svg`}
+        src={`${import.meta.env.BASE_URL}${imageFiles[imageKey]}`}
         alt={t(`step2_${imageKey}_img_alt`)}
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain'
+          objectFit: 'cover',
+          borderRadius: '6px'
         }}
       />
     </div>
