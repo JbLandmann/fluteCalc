@@ -8,11 +8,11 @@ import './App.css'
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/xiao" replace />} />
-        <Route path="xiao" element={<XiaoPage />} />
-        <Route path="acoustical" element={<AcousticalPage />} />
-        <Route path="benade" element={<BenadePage />} />
+      <Route path="/flutecraft/" element={<Layout />}>
+        <Route index element={<Navigate to="/flutecraft/acoustical/" replace />} />
+        <Route path="/flutecraft/xiao/" element={<XiaoPage />} />
+        <Route path="/flutecraft/acoustical/" element={<AcousticalPage />} />
+        <Route path="/flutecraft/benade/" element={<BenadePage />} />
       </Route>
     </Routes>
   )

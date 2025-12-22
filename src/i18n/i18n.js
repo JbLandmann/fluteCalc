@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import fr from './locales/fr.json'
 
-const savedLanguage = localStorage.getItem('flute-calc-language') || 'fr'
+const savedLanguage = localStorage.getItem('flutecraft-language') || 'fr'
 
 i18n
   .use(initReactI18next)

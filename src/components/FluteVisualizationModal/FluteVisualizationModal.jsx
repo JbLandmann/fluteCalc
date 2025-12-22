@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { generateFluteSVG } from '../../utils/fluteDrawing'
+import { FluteSVG } from '../../utils/fluteDrawing'
 
 function FluteVisualizationModal({ isOpen, onClose, fluteData }) {
   useEffect(() => {
@@ -22,8 +22,6 @@ function FluteVisualizationModal({ isOpen, onClose, fluteData }) {
     return null
   }
 
-  const svgContent = generateFluteSVG(fluteData)
-
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose()
@@ -37,9 +35,7 @@ function FluteVisualizationModal({ isOpen, onClose, fluteData }) {
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>×</button>
-        <div 
-          dangerouslySetInnerHTML={{ __html: svgContent }} 
-        />
+        <FluteSVG fluteData={fluteData} />
       </div>
     </div>
   )

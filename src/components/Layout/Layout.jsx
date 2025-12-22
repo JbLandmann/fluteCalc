@@ -12,19 +12,19 @@ function Layout() {
         <LanguageSelector />
         <nav className="tabs">
           <NavLink 
-            to="/xiao" 
+            to="/flutecraft/xiao" 
             className={({ isActive }) => `tab-button ${isActive ? 'active' : ''}`}
           >
             {t('tab_xiao')}
           </NavLink>
           <NavLink 
-            to="/acoustical" 
+            to="/flutecraft/acoustical" 
             className={({ isActive }) => `tab-button ${isActive ? 'active' : ''}`}
           >
             {t('tab_acoustical')}
           </NavLink>
           <NavLink 
-            to="/benade" 
+            to="/flutecraft/benade" 
             className={({ isActive }) => `tab-button ${isActive ? 'active' : ''}`}
           >
             {t('tab_benade')}

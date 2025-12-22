@@ -148,8 +148,8 @@ function XiaoPage() {
         <h3>{t('algo_xiao_how_title')}</h3>
         <ul>
           <li>{t('algo_xiao_how_1')}</li>
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_how_2') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_how_3') }} />
+          <li>{t('algo_xiao_how_2')}</li>
+          <li>{t('algo_xiao_how_3')}</li>
           <li>{t('algo_xiao_how_4')}</li>
           <li>{t('algo_xiao_how_5')}</li>
         </ul>
@@ -157,29 +157,29 @@ function XiaoPage() {
         <h3>{t('algo_calc_details_title')}</h3>
         <p>{t('algo_calc_details_intro')}</p>
         <ul>
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_calc_1') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_calc_2') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_calc_3') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_calc_4') }} />
+          <li>{t('algo_xiao_calc_1')}</li>
+          <li>{t('algo_xiao_calc_2')}</li>
+          <li>{t('algo_xiao_calc_3')}</li>
+          <li>{t('algo_xiao_calc_4')}</li>
         </ul>
 
         <h3>{t('algo_xiao_intervals_title')}</h3>
         <ul>
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_interval_1') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_interval_2') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_interval_3') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_interval_4') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_xiao_interval_5') }} />
+          <li>{t('algo_xiao_interval_1')}</li>
+          <li>{t('algo_xiao_interval_2')}</li>
+          <li>{t('algo_xiao_interval_3')}</li>
+          <li>{t('algo_xiao_interval_4')}</li>
+          <li>{t('algo_xiao_interval_5')}</li>
         </ul>
 
         <div className="empirical-warning">
           <h3>{t('algo_empirical_title')}</h3>
-          <p dangerouslySetInnerHTML={{ __html: t('algo_empirical_intro') }} />
+          <p>{t('algo_empirical_intro')}</p>
           <ul>
-            <li dangerouslySetInnerHTML={{ __html: t('algo_empirical_1') }} />
-            <li dangerouslySetInnerHTML={{ __html: t('algo_empirical_2') }} />
-            <li dangerouslySetInnerHTML={{ __html: t('algo_empirical_3') }} />
-            <li dangerouslySetInnerHTML={{ __html: t('algo_empirical_4') }} />
+            <li>{t('algo_empirical_1')}</li>
+            <li>{t('algo_empirical_2')}</li>
+            <li>{t('algo_empirical_3')}</li>
+            <li>{t('algo_empirical_4')}</li>
           </ul>
         </div>
       </AlgorithmExplanation>
@@ -248,10 +248,9 @@ function XiaoPage() {
         </div>
 
         {selectedModel && modelDescriptions[selectedModel] && (
-          <div 
-            className="model-description"
-            dangerouslySetInnerHTML={{ __html: modelDescriptions[selectedModel] }}
-          />
+          <div className="model-description">
+            {modelDescriptions[selectedModel]}
+          </div>
         )}
       </div>
 
@@ -309,8 +308,9 @@ function XiaoPage() {
                       fontWeight: 'bold', 
                       padding: '15px' 
                     }}
-                    dangerouslySetInnerHTML={{ __html: t('empirical_warning') }}
-                  />
+                  >
+                    {t('empirical_warning')}
+                  </td>
                 </tr>
               )}
             </tbody>

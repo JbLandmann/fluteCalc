@@ -60,10 +60,10 @@ function BenadePage() {
         <h3>{t('algo_calc_details_title')}</h3>
         <p>{t('algo_benade_calc_intro')}</p>
         <ul>
-          <li dangerouslySetInnerHTML={{ __html: t('algo_benade_calc_1') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_benade_calc_2') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_benade_calc_3') }} />
-          <li dangerouslySetInnerHTML={{ __html: t('algo_benade_calc_4') }} />
+          <li>{t('algo_benade_calc_1')}</li>
+          <li>{t('algo_benade_calc_2')}</li>
+          <li>{t('algo_benade_calc_3')}</li>
+          <li>{t('algo_benade_calc_4')}</li>
         </ul>
       </AlgorithmExplanation>
 
