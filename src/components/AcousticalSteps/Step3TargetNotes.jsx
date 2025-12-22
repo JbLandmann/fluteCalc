@@ -59,6 +59,7 @@ function Step3TargetNotes({
   onUpdateNote,
   onMeasureNote,
   onAddNote,
+  onRemoveNote,
   onResetNote,
   onAdjustInterval
 }) {
@@ -329,11 +330,22 @@ function Step3TargetNotes({
         </div>
       ))}
 
-      {targetNotes.length < maxNotes && (
-        <button className="calculate-button" onClick={onAddNote}>
-          {t('step3_add_note')}
-        </button>
-      )}
+      <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'center' }}>
+        {targetNotes.length < maxNotes && (
+          <button className="calculate-button" onClick={onAddNote}>
+            {t('step3_add_note')}
+          </button>
+        )}
+        {targetNotes.length > 3 && (
+          <button 
+            className="calculate-button" 
+            onClick={() => onRemoveNote(targetNotes.length - 1)}
+            style={{ background: '#92867cff' }}
+          >
+            {t('step3_remove_note')}
+          </button>
+        )}
+      </div>
 
     </div>
   )
