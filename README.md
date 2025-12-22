@@ -4,10 +4,8 @@ A web application for calculating precise hole positions when crafting tradition
 
 ## Features
 
-- **Three Calculation Methods**:
-  - Xiao - Sanfen Sunyi Method (Ancient Chinese mathematical system)
-  - Acoustical Physics Method (Reverse engineering with measurement feedback)
-  - Benade's Formula (Woodwind research)
+- **1 Calculation Method**:
+  - Acoustical Physics Method (with measurement feedback)
 
 - **Bilingual Support**: French and English
 - **Real-time Calculations**: Instant feedback as you adjust parameters
@@ -19,12 +17,6 @@ A web application for calculating precise hole positions when crafting tradition
 - Vite 7.2.4
 - React Router 7.1.1
 - react-i18next 15.4.0
-
-## Documentation
-
-- [Product Documentation](docs/PRODUCT.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Contributing Guidelines](docs/CONTRIBUTING.md)
 
 ## License
 
